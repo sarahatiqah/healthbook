@@ -138,7 +138,6 @@ INSERT INTO `patient` (`id`, `icPatient`, `patientName`, `patientEmail`, `passwo
 (1, 123, 'JOHN DOE', 'gotocodex@gmail.com', '123', '011123', 'r'),
 (3, 1234, 'sad', 'SDsd', '123', '234', 'dsfsdf'),
 (4, 980203012345, 'Test 123', 'test@gmail.com', 'test', '0101234567', 'Test'),
-(5, 981112149878, 'Sarah', 'powergirl285@gmail.com', 'healthbook657fc62282001', '0171234567', 'Test');
 
 -- --------------------------------------------------------
 
