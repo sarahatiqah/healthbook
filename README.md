@@ -10,14 +10,18 @@
 
 4. Open PHPMyAdmin (http://localhost/phpmyadmin)
 
-5. Run the script http://localhost/healthbook
+5. Create a database with name **healthbook**
+
+6. Import healthbook.sql file
+
+7. Run the script http://localhost/healthbook
 
 ## Account Credentials for Login
 ### Admin Login
 
 - Username: admin
 
-- Password: admin
+- Password: 123
 
 ### Doctor Login
 
