@@ -18,6 +18,16 @@
                  <i class="zmdi zmdi-calendar"></i> <span>Appointment</span>
              </a>
          </li>
+         <li>
+             <a href="patients.php">
+                 <i class="fa fa-users"></i><span>Patients</span>
+             </a>
+         </li>
+         <li>
+             <a href="educational-resources.php">
+                 <i class="zmdi zmdi-attachment"></i> <span>Educational Resources</span>
+             </a>
+         </li>
          <!-- <li>
              <a href="myschedule.php">
                  <i class="zmdi zmdi-calendar"></i> <span>My Schedule</span>

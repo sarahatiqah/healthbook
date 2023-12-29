@@ -24,7 +24,16 @@
                  <i class="zmdi zmdi-accounts-alt"></i> <span>Staff</span>
              </a>
          </li>
-
+         <li>
+             <a href="patients.php">
+                 <i class="fa fa-users"></i><span>Patients</span>
+             </a>
+         </li>
+         <!-- <li>
+             <a href="report.php">
+                 <i class="fa fa-print"></i> <span>Report</span>
+             </a>
+         </li> -->
          <!-- <li>
              <a href="forms.html">
                  <i class="zmdi zmdi-format-list-bulleted"></i> <span>Forms</span>

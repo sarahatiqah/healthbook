@@ -29,16 +29,25 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
   }
 
 
-
   if (isset($_GET['delete_id'])) {
     $delete_id = clean($_GET['delete_id']);
 
-    // Perform the delete operation
-    $query = "DELETE FROM dependent WHERE id_dependent = '$delete_id'";
-    if (mysqli_query($con, $query)) {
-      $_SESSION['prompt'] = "Dependent deleted successfully.";
-    } else {
-      $_SESSION['errprompt'] = "Error deleting dependent.";
+    try {
+      // Perform the delete operation
+      $query = "DELETE FROM dependent WHERE id_dependent = '$delete_id'";
+      if (mysqli_query($con, $query)) {
+        $_SESSION['prompt'] = "Dependent deleted successfully.";
+      } else {
+        throw new Exception("Error deleting dependent.");
+      }
+    } catch (Exception $e) {
+      // Check if the error is due to a foreign key constraint
+      $error = mysqli_error($con);
+      if (strpos($error, 'foreign key constraint') !== false) {
+        $_SESSION['errprompt'] = "Cannot delete dependent. It is referenced by other records.";
+      } else {
+        $_SESSION['errprompt'] = $e->getMessage(); // Use the exception message
+      }
     }
 
     header("location: dependent.php");
@@ -124,22 +133,29 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                         $count = 1;
                         $query = "SELECT * from dependent WHERE  patientId='" . $_SESSION['id'] . "'";
 
-                        if ($result = mysqli_query($con, $query)) {
-                          while ($row = mysqli_fetch_assoc($result)) {
-                            extract($row);
+                        $result = mysqli_query($con, $query);
+
+                        if ($result) {
+                          if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                              extract($row);
                         ?>
-                            <tr>
-                              <th scope="row"><?php echo $count; ?></th>
-                              <td><?php echo $name_dependent; ?></td>
-                              <td><?php echo $relationship; ?></td>
-                              <td>
-                                <!-- <button type="submit" class="btn btn-warning"><i class="icon-pencil"></i> Edit</button> -->
-                                <a href="edit-dependent.php?id=<?php echo $id_dependent; ?>" class="btn btn-warning"><i class="icon-pencil"></i> Edit</a>
-                                <a href="dependent.php?delete_id=<?php echo $id_dependent; ?>" class="btn btn-danger" onclick="return confirmDelete();"><i class="icon-trash"></i> Delete</a>
-                              </td>
-                            </tr>
+                              <tr>
+                                <th scope="row"><?php echo $count; ?></th>
+                                <td><?php echo $name_dependent; ?></td>
+                                <td><?php echo $relationship; ?></td>
+                                <td>
+                                  <a href="edit-dependent.php?id=<?php echo $id_dependent; ?>" class="btn btn-warning"><i class="icon-pencil"></i> Edit</a>
+                                  <a href="dependent.php?delete_id=<?php echo $id_dependent; ?>" class="btn btn-danger" onclick="return confirmDelete();"><i class="icon-trash"></i> Delete</a>
+                                </td>
+                              </tr>
                         <?php
-                            $count++;
+                              $count++;
+                            }
+                          } else {
+                            echo "<tr>";
+                            echo "<td colspan='4' style='text-align: center; color: red;'>No records found</td>";
+                            echo "</tr>";
                           }
                         } else {
                           die("Error with the query in the database");
@@ -147,6 +163,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                         ?>
                       </tbody>
                     </table>
+
                   </div>
                 </div>
               </div>

@@ -24,4 +24,6 @@
     <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
     <!-- Sidebar CSS-->
     <link href="../assets/css/sidebar-menu.css" rel="stylesheet" />
+    <!--Full Calendar Css-->
+    <link href="../assets/plugins/fullcalendar/css/fullcalendar.min.css" rel='stylesheet' />
 </head>

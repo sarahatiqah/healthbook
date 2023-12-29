@@ -24,4 +24,5 @@
     <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
     <!-- Sidebar CSS-->
     <link href="../assets/css/sidebar-menu.css" rel="stylesheet" />
+
 </head>

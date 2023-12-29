@@ -8,12 +8,11 @@ require '../functions.php';
 if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
 
-
-
   if (isset($_POST['save'])) {
     $id = clean($_POST['id']);
     $adminId = clean($_POST['adminId']);
     $adminName = clean($_POST['adminName']);
+    $password = clean($_POST['password']);
 
     // Check if the email is being updated
     $currentAdminIdQuery = "SELECT adminId FROM admin WHERE id = '$id'";
@@ -42,6 +41,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
     if (mysqli_query($con, $updateQuery)) {
       $_SESSION['prompt'] = "Information updated successfully.";
+      $_SESSION['adminId'] = $adminId;
       header("location:profile.php");
       exit;
     } else {
@@ -124,13 +124,13 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">ID Admin</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="adminId" type="text" value="<?php echo $adminId ?>">
+                            <input class="form-control" name="adminId" type="text" value="<?php echo $adminId ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Name</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="adminName" type="text" value="<?php echo $adminName ?>">
+                            <input class="form-control" name="adminName" type="text" value="<?php echo $adminName ?>" required>
                           </div>
                         </div>
 
@@ -139,7 +139,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Password</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="password" type="password" value="<?php echo $password ?>">
+                            <input class="form-control" name="password" type="password" value="<?php echo $password ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">

@@ -13,6 +13,11 @@
                  <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
              </a>
          </li>
+         <li>
+             <a href="appointment.php">
+                 <i class="zmdi zmdi-calendar"></i> <span>Appointment</span>
+             </a>
+         </li>
          <!-- 
 
          <li>

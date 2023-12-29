@@ -1,8 +1,10 @@
- <?php
+<?php
     $query = "SELECT * from patient WHERE id='" . $_SESSION['id'] . "' ";
     $result = mysqli_query($con, $query);
     $row = mysqli_fetch_assoc($result);
     extract($row);
+
+
     ?>
  <!--Start topbar header-->
  <header class="topbar-nav">
@@ -13,12 +15,12 @@
                      <i class="icon-menu menu-icon"></i>
                  </a>
              </li>
-             <li class="nav-item">
+             <!-- <li class="nav-item">
                  <form class="search-bar">
-                     <input type="text" class="form-control" placeholder="Enter keywords">
+                     <input type="text" class="form-control" placeholder="Find doctor">
                      <a href="javascript:void();"><i class="icon-magnifier"></i></a>
                  </form>
-             </li>
+             </li> -->
          </ul>
 
          <ul class="navbar-nav align-items-center right-nav-link">

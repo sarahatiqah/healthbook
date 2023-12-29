@@ -126,18 +126,30 @@ if (isset($_POST['login'])) {
             <div class="form-group">
               <label for="username" class="sr-only">Username/Email</label>
               <div class="position-relative has-icon-right">
-                <input type="text" name="username" class="form-control input-shadow" placeholder="Enter Username/Email">
+                <input type="text" name="username" class="form-control input-shadow" placeholder="Enter Username/Email" required>
                 <div class="form-control-position">
                   <i class="icon-user"></i>
                 </div>
               </div>
             </div>
+            <style>
+              input::-ms-reveal,
+              input::-ms-clear {
+                display: none;
+              }
+
+              /* Add this CSS to your stylesheet */
+              .fa.fa-eye-slash::before {
+                content: "\f070";
+                /* Unicode for the eye-slash icon in Font Awesome */
+              }
+            </style>
             <div class="form-group">
               <label for="exampleInputPassword" class="sr-only">Password</label>
               <div class="position-relative has-icon-right">
-                <input type="password" name="password" class="form-control input-shadow" placeholder="Enter Password">
-                <div class="form-control-position">
-                  <i class="icon-lock"></i>
+                <input type="password" name="password" class="form-control input-shadow" id="myInput" placeholder="Enter Password" required>
+                <div class="form-control-position toggle-password">
+                  <i class="fa fa-eye" id="togglePassword"></i>
                 </div>
               </div>
             </div>
@@ -183,6 +195,18 @@ if (isset($_POST['login'])) {
   <!-- Custom scripts -->
   <script src="assets/js/app-script.js"></script>
 
+  <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#myInput');
+
+    togglePassword.addEventListener('click', function(e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle the eye icon class
+      this.classList.toggle('fa-eye-slash');
+    });
+  </script>
 </body>
 
 </html>

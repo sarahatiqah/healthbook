@@ -10,7 +10,17 @@
          <li class="sidebar-header">MAIN NAVIGATION</li>
          <li>
              <a href="home.php">
-                 <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
+                 <i class="zmdi zmdi-view-dashboard" aria-hidden="true"></i> <span>Dashboard</span>
+             </a>
+         </li>
+         <li>
+             <a href="doctors.php">
+                 <i class="fa fa-user-md" aria-hidden="true"></i><span>Doctors</span>
+             </a>
+         </li>
+         <li>
+             <a href="appointment.php">
+                 <i class="zmdi zmdi-calendar" aria-hidden="true"></i> <span>My Appointment</span>
              </a>
          </li>
          <!-- 
@@ -23,18 +33,34 @@
          </li> -->
          <li>
              <a href="dependent.php">
-                 <i class="zmdi zmdi-accounts-list-alt"></i> <span>Dependents</span>
+                 <i class="zmdi zmdi-accounts-list-alt" aria-hidden="true"></i> <span>Dependents</span>
+             </a>
+         </li>
+
+         <li>
+             <a href="covid.php">
+                 <i class="fa fa-thermometer-full" aria-hidden="true"></i><span>Covid-19 Self Assessment</span>
+             </a>
+         </li>
+         <li>
+             <a href="health-metrics.php">
+                 <i class="zmdi zmdi-male" aria-hidden="true"></i> <span>Health Metrics</span>
+             </a>
+         </li>
+         <li>
+             <a href="educational-resources.php">
+                 <i class="zmdi zmdi-attachment" aria-hidden="true"></i> <span>Educational Resources</span>
              </a>
          </li>
          <li>
              <a href="profile.php">
-                 <i class="zmdi zmdi-face"></i> <span>My Profile</span>
+                 <i class="zmdi zmdi-face" aria-hidden="true"></i> <span>My Profile</span>
              </a>
          </li>
 
          <li>
              <a href="../logout.php">
-                 <i class="icon-power text-danger"></i> <span>Logout</span>
+                 <i class="icon-power text-danger" aria-hidden="true"></i> <span>Logout</span>
              </a>
          </li>
 

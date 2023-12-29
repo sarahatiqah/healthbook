@@ -8,8 +8,6 @@ require '../functions.php';
 if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
 
-
-
   if (isset($_POST['register'])) {
     $doctorId = clean($_POST['doctorId']);
     $doctorName = clean($_POST['doctorName']);
@@ -18,29 +16,29 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
     $password = clean($_POST['password']);
     $specialization = clean($_POST['specialization']);
 
+    $queryEmail = "SELECT doctorEmail FROM doctor WHERE doctorEmail = '$doctorEmail'";
+    $resultEmail = mysqli_query($con, $queryEmail);
 
+    $queryPatient = "SELECT patientEmail FROM patient WHERE patientEmail = '$doctorEmail'";
+    $resultPatient = mysqli_query($con, $queryPatient);
 
-    $query = "SELECT doctorEmail FROM doctor WHERE doctorEmail = '$doctorEmail'";
-    $result = mysqli_query($con, $query);
+    $queryStaff = "SELECT staffEmail FROM staff WHERE staffEmail = '$doctorEmail'";
+    $resultStaff = mysqli_query($con, $queryStaff);
 
-    if (mysqli_num_rows($result) == 0) {
+    if (mysqli_num_rows($resultEmail) == 0 && mysqli_num_rows($resultPatient) == 0 && mysqli_num_rows($resultStaff) == 0) {
 
-      $query = "SELECT doctorId FROM doctor WHERE doctorId = '$doctorId'";
-      $result = mysqli_query($con, $query);
+      $queryDoctorId = "SELECT doctorId FROM doctor WHERE doctorId = '$doctorId'";
+      $resultDoctorId = mysqli_query($con, $queryDoctorId);
 
-      if (mysqli_num_rows($result) == 0) {
+      if (mysqli_num_rows($resultDoctorId) == 0) {
 
-        $query = "INSERT INTO doctor (doctorId,doctorName,doctorEmail, password,doctorPhone,specialization)
-          VALUES ('$doctorId', '$doctorName', '$doctorEmail','$password', '$doctorPhone', '$specialization')";
+        $insertQuery = "INSERT INTO doctor (doctorId, doctorName, doctorEmail, password, doctorPhone, specialization)
+                VALUES ('$doctorId', '$doctorName', '$doctorEmail','$password', '$doctorPhone', '$specialization')";
 
-        if (mysqli_query($con, $query)) {
+        if (mysqli_query($con, $insertQuery)) {
 
           $_SESSION['prompt'] = "New account doctor registered.";
           header("location:doctors.php");
-          // echo "<script type = \"text/javascript\">
-          // alert(\"Account doctor registered.\");
-          // window.location = (\"doctors.php\")
-          // </script>";
           exit;
         } else {
 
@@ -49,41 +47,35 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
       } else {
 
         $_SESSION['errprompt'] = "Doctor ID already exists.";
-        // unset($_SESSION['errprompt']);
-
-        // echo "<script type = \"text/javascript\">
-        // alert(\"Failed ! Doctor ID already exists.\");
-        // window.location = (\"doctors.php\")
-        // </script>";
       }
     } else {
 
       $_SESSION['errprompt'] = "Email already exists.";
-      // unset($_SESSION['errprompt']);
-
-      // echo "<script type = \"text/javascript\">
-      // alert(\"Faield ! Email already exists.\");
-      // window.location = (\"doctors.php\")
-      // </script>";
     }
   }
+
 
 
 
   if (isset($_GET['delete_id'])) {
     $delete_id = clean($_GET['delete_id']);
 
-    // Perform the delete operation
-    $query = "DELETE FROM doctor WHERE id = '$delete_id'";
-    if (mysqli_query($con, $query)) {
-      $_SESSION['prompt'] = "Doctor deleted successfully.";
-    } else {
-      $_SESSION['errprompt'] = "Error deleting doctor.";
+    try {
+      // Perform the delete operation
+      $query = "DELETE FROM doctor WHERE id = '$delete_id'";
+      if (mysqli_query($con, $query)) {
+        $_SESSION['prompt'] = "Doctor deleted successfully.";
+      } else {
+        throw new Exception("Error deleting doctor.");
+      }
+    } catch (Exception $e) {
+      $_SESSION['errprompt'] = "Cannot delete doctor. It is referenced by other records.";
     }
 
     header("location: doctors.php");
     exit;
   }
+
 ?>
   <!DOCTYPE html>
   <html lang="en">
@@ -209,6 +201,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                               <td><?php echo $name_specialization; ?></td>
                               <td>
                                 <!-- <button type="submit" class="btn btn-warning"><i class="icon-pencil"></i> Edit</button> -->
+                                <a href="view-doctor.php?id=<?php echo $id; ?>" class="btn btn-light"><i class="icon-eye"></i> View</a>
                                 <a href="edit-doctor.php?id=<?php echo $id; ?>" class="btn btn-warning"><i class="icon-pencil"></i> Edit</a>
                                 <a href="doctors.php?delete_id=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirmDelete();"><i class="icon-trash"></i> Delete</a>
                               </td>

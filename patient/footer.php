@@ -1,11 +1,11 @@
 <!--Start footer-->
-<footer class="footer">
+<!-- <footer class="footer">
   <div class="container">
     <div class="text-center">
       Copyright © 2023 HealthBook
     </div>
   </div>
-</footer>
+</footer> -->
 <!--End footer-->
 
 <!--start color switcher-->
@@ -61,9 +61,7 @@
 <script src="../assets/js/jquery.loading-indicator.js"></script>
 <!-- Custom scripts -->
 <script src="../assets/js/app-script.js"></script>
-<!-- Chart js -->
-
-<script src="../assets/plugins/Chart.js/Chart.min.js"></script>
-
-<!-- Index js -->
-<script src="../assets/js/index.js"></script>
+<!-- Full Calendar -->
+<script src='../assets/plugins/fullcalendar/js/moment.min.js'></script>
+<script src='../assets/plugins/fullcalendar/js/fullcalendar.min.js'></script>
+<!-- <script src="../assets/plugins/fullcalendar/js/fullcalendar-custom-script.js"></script> -->

@@ -7,7 +7,6 @@ require '../functions.php';
 
 if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
-
   if (isset($_POST['save'])) {
     $id = clean($_POST['id']);
     $doctorId = clean($_POST['doctorId']);
@@ -17,41 +16,44 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
     $password = clean($_POST['password']);
     $specialization = clean($_POST['specialization']);
 
+    // Check if the doctorId is being updated
+    $currentIdQuery = "SELECT doctorId FROM doctor WHERE id = '$id'";
+    $currentIdResult = mysqli_query($con, $currentIdQuery);
+    $currentIdRow = mysqli_fetch_assoc($currentIdResult);
+    $currentId = $currentIdRow['doctorId'];
 
-    // Check if the email is being updated
-    $currentIcQuery = "SELECT doctorId FROM doctor WHERE id = '$id'";
-    $currentIcResult = mysqli_query($con, $currentIcQuery);
-    $currentIcRow = mysqli_fetch_assoc($currentIcResult);
-    $currentIc = $currentIcRow['doctorId'];
+    if ($currentId != $doctorId) {
+      // doctorId is being updated, check for uniqueness
+      $idCheckQuery = "SELECT doctorId FROM doctor WHERE doctorId = '$doctorId'";
+      $idCheckResult = mysqli_query($con, $idCheckQuery);
 
-    if ($currentIc != $doctorId) {
-      // Email is being updated, check for uniqueness
-      $IcCheckQuery = "SELECT doctorId FROM doctor WHERE doctorId = '$doctorId'";
-      $IcCheckResult = mysqli_query($con, $IcCheckQuery);
-
-      if (mysqli_num_rows($IcCheckResult) > 0) {
+      if (mysqli_num_rows($idCheckResult) > 0) {
         $_SESSION['errprompt'] = "Doctor ID already exists.";
         header("location:profile.php");
         exit;
       }
     }
 
-    // Check if the email is being updated
+    // Check if the doctorEmail is being updated
     $currentEmailQuery = "SELECT doctorEmail FROM doctor WHERE id = '$id'";
     $currentEmailResult = mysqli_query($con, $currentEmailQuery);
     $currentEmailRow = mysqli_fetch_assoc($currentEmailResult);
     $currentEmail = $currentEmailRow['doctorEmail'];
 
-    if ($currentEmail != $doctorEmail) {
-      // Email is being updated, check for uniqueness
-      $emailCheckQuery = "SELECT doctorEmail FROM doctor WHERE doctorEmail = '$doctorEmail'";
-      $emailCheckResult = mysqli_query($con, $emailCheckQuery);
+    // Check if the new doctorEmail already exists
+    $emailCheckQuery = "SELECT doctorEmail FROM doctor WHERE doctorEmail = '$doctorEmail' AND id != '$id'";
+    $emailCheckResult = mysqli_query($con, $emailCheckQuery);
 
-      if (mysqli_num_rows($emailCheckResult) > 0) {
-        $_SESSION['errprompt'] = "Email already exists.";
-        header("location:profile.php");
-        exit;
-      }
+    $staffEmailCheckQuery = "SELECT staffEmail FROM staff WHERE staffEmail = '$doctorEmail'";
+    $staffEmailCheckResult = mysqli_query($con, $staffEmailCheckQuery);
+
+    $patientEmailCheckQuery = "SELECT patientEmail FROM patient WHERE patientEmail = '$doctorEmail'";
+    $patientEmailCheckResult = mysqli_query($con, $patientEmailCheckQuery);
+
+    if (mysqli_num_rows($emailCheckResult) > 0 || mysqli_num_rows($staffEmailCheckResult) > 0 || mysqli_num_rows($patientEmailCheckResult) > 0) {
+      $_SESSION['errprompt'] = "Email already exists.";
+      header("location:profile.php");
+      exit;
     }
 
     // Continue with the rest of your update logic
@@ -70,9 +72,9 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
     } else {
       $_SESSION['errprompt'] = "Error updating information: " . mysqli_error($con);
       header("location:profile.php");
+      exit;
     }
   }
-
 ?>
   <!DOCTYPE html>
   <html lang="en">
@@ -155,19 +157,19 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Full Name</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="doctorName" type="text" value="<?php echo $doctorName ?>">
+                            <input class="form-control" name="doctorName" type="text" value="<?php echo $doctorName ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Email</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="doctorEmail" type="email" value="<?php echo $doctorEmail ?>">
+                            <input class="form-control" name="doctorEmail" type="email" value="<?php echo $doctorEmail ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Phone Number</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="doctorPhone" type="number" value="<?php echo $doctorPhone ?>">
+                            <input class="form-control" name="doctorPhone" type="number" value="<?php echo $doctorPhone ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">
@@ -197,7 +199,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Password</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="password" type="password" value="<?php echo $password ?>">
+                            <input class="form-control" name="password" type="password" value="<?php echo $password ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">

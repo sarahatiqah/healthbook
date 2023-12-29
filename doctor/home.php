@@ -21,6 +21,33 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
       include "sidebar.php";
       include "header.php";
 
+      $query = "SELECT COUNT(*) as total FROM appointment WHERE status='done' AND doctorID=$id";
+      $result = mysqli_query($con, $query);
+      $row = mysqli_fetch_assoc($result);
+      $countAppointmentDone = $row['total'];
+
+      $query2 = "SELECT COUNT(*) as total FROM appointment";
+      $result2 = mysqli_query($con, $query2);
+      $row2 = mysqli_fetch_assoc($result2);
+      $countAppointment = $row2['total'];
+
+      $query3 = "SELECT COUNT(*) as total FROM appointment WHERE status='approved' AND doctorID=$id";
+      $result3 = mysqli_query($con, $query3);
+      $row3 = mysqli_fetch_assoc($result3);
+      $countAppointmentApproved = $row3['total'];
+
+      $query4 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND doctorID=$id";
+      $result4 = mysqli_query($con, $query4);
+      $row4 = mysqli_fetch_assoc($result4);
+      $countAppointmentPending = $row4['total'];
+
+      $currentDateTime = new DateTime();
+      $currentDate = $currentDateTime->format("Y-m-d");
+      $currentTime = $currentDateTime->format("H:i:s");
+      $query5 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND (appDate > '$currentDate' OR (appDate = '$currentDate' AND appTime > '$currentTime')) AND doctorID=$id";
+      $result5 = mysqli_query($con, $query5);
+      $row5 = mysqli_fetch_assoc($result5);
+      $countAppointmentPendingUpcoming = $row5['total'];
       ?>
 
 
@@ -37,165 +64,39 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
               <div class="row row-group m-0">
                 <div class="col-12 col-lg-6 col-xl-3 border-light">
                   <div class="card-body">
-                    <h5 class="text-white mb-0">10 <span class="float-right"><i class="fa fa-users"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                      <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Total Doctors </p>
+                    <h5 class="text-white mb-0"><?php echo $countAppointment ?> <span class="float-right"><i class="zmdi zmdi-calendar"></i></span></h5>
+
+                    <p class="mb-0 text-white small-font">Total Appointment</p>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6 col-xl-3 border-light">
                   <div class="card-body">
-                    <h5 class="text-white mb-0">8323 <span class="float-right"><i class="fa fa-usd"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                      <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Total Revenue <span class="float-right">+1.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                    <h5 class="text-white mb-0"><?php echo $countAppointmentDone ?> <span class="float-right"><i class="zmdi zmdi-badge-check"></i></span></h5>
+
+                    <p class="mb-0 text-white small-font">Total Done Appointment</p>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6 col-xl-3 border-light">
                   <div class="card-body">
-                    <h5 class="text-white mb-0">6200 <span class="float-right"><i class="fa fa-eye"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                      <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Visitors <span class="float-right">+5.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                    <h5 class="text-white mb-0"><?php echo $countAppointmentApproved ?> <span class="float-right"><i class="zmdi zmdi-case-check"></i></span></h5>
+
+                    <p class="mb-0 text-white small-font">Total Approved Appointment</p>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6 col-xl-3 border-light">
                   <div class="card-body">
-                    <h5 class="text-white mb-0">5630 <span class="float-right"><i class="fa fa-envira"></i></span></h5>
-                    <div class="progress my-3" style="height:3px;">
-                      <div class="progress-bar" style="width:55%"></div>
-                    </div>
-                    <p class="mb-0 text-white small-font">Messages <span class="float-right">+2.2% <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                    <h5 class="text-white mb-0"><?php echo $countAppointmentPending ?> <span class="float-right"><i class="zmdi zmdi-spinner"></i></span></h5>
+
+                    <p class="mb-0 text-white small-font">Total Pending Appointment</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-
-
-          <!-- <div class="row">
-            <div class="col-12 col-lg-12">
-              <div class="card">
-                <div class="card-header">Recent Order Tables
-                  <div class="card-action">
-                    <div class="dropdown">
-                      <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
-                        <i class="icon-options"></i>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="javascript:void();">Action</a>
-                        <a class="dropdown-item" href="javascript:void();">Another action</a>
-                        <a class="dropdown-item" href="javascript:void();">Something else here</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="javascript:void();">Separated link</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="table-responsive">
-                  <table class="table align-items-center table-flush table-borderless">
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Photo</th>
-                        <th>Product ID</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Shipping</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Iphone 5</td>
-                        <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
-                        <td>#9405822</td>
-                        <td>$ 1250.00</td>
-                        <td>03 Aug 2017</td>
-                        <td>
-                          <div class="progress shadow" style="height: 3px;">
-                            <div class="progress-bar" role="progressbar" style="width: 90%"></div>
-                          </div>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>Earphone GL</td>
-                        <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
-                        <td>#9405820</td>
-                        <td>$ 1500.00</td>
-                        <td>03 Aug 2017</td>
-                        <td>
-                          <div class="progress shadow" style="height: 3px;">
-                            <div class="progress-bar" role="progressbar" style="width: 60%"></div>
-                          </div>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>HD Hand Camera</td>
-                        <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
-                        <td>#9405830</td>
-                        <td>$ 1400.00</td>
-                        <td>03 Aug 2017</td>
-                        <td>
-                          <div class="progress shadow" style="height: 3px;">
-                            <div class="progress-bar" role="progressbar" style="width: 70%"></div>
-                          </div>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>Clasic Shoes</td>
-                        <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
-                        <td>#9405825</td>
-                        <td>$ 1200.00</td>
-                        <td>03 Aug 2017</td>
-                        <td>
-                          <div class="progress shadow" style="height: 3px;">
-                            <div class="progress-bar" role="progressbar" style="width: 100%"></div>
-                          </div>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>Hand Watch</td>
-                        <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
-                        <td>#9405840</td>
-                        <td>$ 1800.00</td>
-                        <td>03 Aug 2017</td>
-                        <td>
-                          <div class="progress shadow" style="height: 3px;">
-                            <div class="progress-bar" role="progressbar" style="width: 40%"></div>
-                          </div>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>Clasic Shoes</td>
-                        <td><img src="https://via.placeholder.com/110x110" class="product-img" alt="product img"></td>
-                        <td>#9405825</td>
-                        <td>$ 1200.00</td>
-                        <td>03 Aug 2017</td>
-                        <td>
-                          <div class="progress shadow" style="height: 3px;">
-                            <div class="progress-bar" role="progressbar" style="width: 100%"></div>
-                          </div>
-                        </td>
-                      </tr>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div> -->
-
-          <!--End Row-->
-
+          <div class="mt-3">
+            <div id='calendar'></div>
+          </div>
           <!--End Dashboard Content-->
 
           <!--start overlay-->
@@ -206,12 +107,105 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
         <!-- End container-fluid-->
 
       </div><!--End content-wrapper-->
+
+
+      <style>
+        /* Add your animation class */
+        .modal.fade .modal-dialog {
+          /* transform: translate(0, -50%); */
+          transition: transform 0.5s ease-out;
+        }
+      </style>
+      <!-- The Modal -->
+      <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title" style="color: black;">Notifications</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <p style="color: black;">You have <span style="color: red;"><?php echo $countAppointmentPendingUpcoming ?></span> new upcoming appointment to be approved.
+                <a href="appointment.php" style="color: blue;">Click here for more details</a>
+              </p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
       <!--Start Back To Top Button-->
       <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
       <!--End Back To Top Button-->
 
 
-      <?php include "footer.php"; ?>
+      <?php include "footer.php";
+
+
+      $query = "SELECT a.appDate, a.appTime, b.patientName
+FROM appointment a 
+JOIN patient b
+WHERE (a.status='approved' OR a.status='done') AND a.doctorID=$did AND a.patientid=b.id";
+
+
+
+      $result = mysqli_query($con, $query);
+
+      $events = array();
+
+      while ($row = mysqli_fetch_assoc($result)) {
+        $formattedTime = date('h:i A', strtotime($row['appTime']));
+
+        // Map your database fields to FullCalendar properties
+        $event = array(
+          'title' =>   $formattedTime . ': ' . $row['patientName'],
+          'start' => $row['appDate'] . 'T' . $row['appTime'], // Combine date and time
+          'end' => $row['appDate'] . 'T' . $row['appTime'], // You may adjust this based on your needs
+        );
+
+        $events[] = $event;
+      }
+      ?>
+
+      <script>
+        $(document).ready(function() {
+          // Add a delay of 1000 milliseconds (1 second) before showing the modal
+          setTimeout(function() {
+            // Add the 'animated' class to the modal for the transition effect
+            $('#myModal').addClass('animated').modal('show');
+          }, 1000);
+
+          // Initialize FullCalendar
+          $('#calendar').fullCalendar({
+            header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: ''
+            },
+            defaultDate: moment().format('YYYY-MM-DD'),
+            navLinks: true,
+            eventLimit: true,
+            editable: true, // Allow events to be dragged and resized
+            selectable: true, // Allow users to select dates
+            events: <?php echo json_encode($events); ?>,
+            eventRender: function(event, element) {
+              // Customize the event rendering
+              element.find('.fc-time').css('display', 'none'); // Hide the time
+              element.find('.fc-title').html(event.title); // Set the title
+            }
+          });
+        });
+      </script>
 
 
   </body>

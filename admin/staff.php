@@ -7,36 +7,37 @@ require '../functions.php';
 
 if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
-
-
-
   if (isset($_POST['register'])) {
     $staffId = clean($_POST['staffId']);
     $staffName = clean($_POST['staffName']);
     $staffPhone = clean($_POST['staffPhone']);
     $staffEmail = clean($_POST['staffEmail']);
     $password = clean($_POST['password']);
-    $specialization = clean($_POST['specialization']);
+    $staffAddress = clean($_POST['staffAddress']);
 
+    $queryEmail = "SELECT staffEmail FROM staff WHERE staffEmail = '$staffEmail'";
+    $resultEmail = mysqli_query($con, $queryEmail);
 
+    $queryDoctor = "SELECT doctorEmail FROM doctor WHERE doctorEmail = '$staffEmail'";
+    $resultDoctor = mysqli_query($con, $queryDoctor);
 
-    $query = "SELECT staffEmail FROM staff WHERE staffEmail = '$staffEmail'";
-    $result = mysqli_query($con, $query);
+    $queryPatient = "SELECT patientEmail FROM patient WHERE patientEmail = '$staffEmail'";
+    $resultPatient = mysqli_query($con, $queryPatient);
 
-    if (mysqli_num_rows($result) == 0) {
+    if (mysqli_num_rows($resultEmail) == 0 && mysqli_num_rows($resultDoctor) == 0 && mysqli_num_rows($resultPatient) == 0) {
 
-      $query = "SELECT staffId FROM staff WHERE staffId = '$staffId'";
-      $result = mysqli_query($con, $query);
+      $queryStaffId = "SELECT staffId FROM staff WHERE staffId = '$staffId'";
+      $resultStaffId = mysqli_query($con, $queryStaffId);
 
-      if (mysqli_num_rows($result) == 0) {
+      if (mysqli_num_rows($resultStaffId) == 0) {
 
-        $query = "INSERT INTO staff (staffId,staffName,staffEmail, password,staffPhone,specialization)
-          VALUES ('$staffId', '$staffName', '$staffEmail','$password', '$staffPhone', '$specialization')";
+        $insertQuery = "INSERT INTO staff (staffId, staffName, staffEmail, password, staffPhone, staffAddress)
+                VALUES ('$staffId', '$staffName', '$staffEmail','$password', '$staffPhone', '$staffAddress')";
 
-        if (mysqli_query($con, $query)) {
+        if (mysqli_query($con, $insertQuery)) {
 
           $_SESSION['prompt'] = "New account staff registered.";
-          header("location:staffs.php");
+          header("location:staff.php");
           exit;
         } else {
 
@@ -44,7 +45,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
         }
       } else {
 
-        $_SESSION['errprompt'] = "staff ID already exists.";
+        $_SESSION['errprompt'] = "Staff ID already exists.";
       }
     } else {
 
@@ -54,18 +55,19 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
 
 
+
   if (isset($_GET['delete_id'])) {
     $delete_id = clean($_GET['delete_id']);
 
     // Perform the delete operation
     $query = "DELETE FROM staff WHERE id = '$delete_id'";
     if (mysqli_query($con, $query)) {
-      $_SESSION['prompt'] = "staff deleted successfully.";
+      $_SESSION['prompt'] = "Staff deleted successfully.";
     } else {
       $_SESSION['errprompt'] = "Error deleting staff.";
     }
 
-    header("location: staffs.php");
+    header("location: staff.php");
     exit;
   }
 ?>
@@ -177,8 +179,9 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                               </td>
                               <td>
                                 <!-- <button type="submit" class="btn btn-warning"><i class="icon-pencil"></i> Edit</button> -->
+                                <a href="view-staff.php?id=<?php echo $id; ?>" class="btn btn-light"><i class="icon-eye"></i> View</a>
                                 <a href="edit-staff.php?id=<?php echo $id; ?>" class="btn btn-warning"><i class="icon-pencil"></i> Edit</a>
-                                <a href="staffs.php?delete_id=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirmDelete();"><i class="icon-trash"></i> Delete</a>
+                                <a href="staff.php?delete_id=<?php echo $id; ?>" class="btn btn-danger" onclick="return confirmDelete();"><i class="icon-trash"></i> Delete</a>
                               </td>
                             </tr>
                         <?php

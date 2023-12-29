@@ -1,4 +1,4 @@
- <?php
+<?php
     $query = "SELECT * from staff WHERE staffId='" . $_SESSION['staffId'] . "' ";
     $result = mysqli_query($con, $query);
     $row = mysqli_fetch_assoc($result);

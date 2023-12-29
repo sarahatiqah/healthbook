@@ -6,8 +6,6 @@ require '../dbconnection.php';
 require '../functions.php';
 
 if (isset($_SESSION['id'], $_SESSION['password'])) {
-
-
   if (isset($_POST['save'])) {
     $id = clean($_POST['id']);
     $icPatient = clean($_POST['icPatient']);
@@ -15,43 +13,48 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
     $patientPhone = clean($_POST['patientPhone']);
     $patientEmail = clean($_POST['patientEmail']);
     $password = clean($_POST['password']);
+    $patientGender = clean($_POST['patientGender']);
+    $patientRace = clean($_POST['patientRace']);
     $patientAddress = clean($_POST['patientAddress']);
 
-
-    // Check if the email is being updated
+    // Check if the icPatient is being updated
     $currentIcQuery = "SELECT icPatient FROM patient WHERE id = '$id'";
     $currentIcResult = mysqli_query($con, $currentIcQuery);
     $currentIcRow = mysqli_fetch_assoc($currentIcResult);
     $currentIc = $currentIcRow['icPatient'];
 
     if ($currentIc != $icPatient) {
-      // Email is being updated, check for uniqueness
-      $IcCheckQuery = "SELECT icPatient FROM patient WHERE icPatient = '$icPatient'";
-      $IcCheckResult = mysqli_query($con, $IcCheckQuery);
+      // icPatient is being updated, check for uniqueness
+      $icCheckQuery = "SELECT icPatient FROM patient WHERE icPatient = '$icPatient'";
+      $icCheckResult = mysqli_query($con, $icCheckQuery);
 
-      if (mysqli_num_rows($IcCheckResult) > 0) {
+      if (mysqli_num_rows($icCheckResult) > 0) {
         $_SESSION['errprompt'] = "IC already exists.";
         header("location:profile.php");
         exit;
       }
     }
 
-    // Check if the email is being updated
+    // Check if the patientEmail is being updated
     $currentEmailQuery = "SELECT patientEmail FROM patient WHERE id = '$id'";
     $currentEmailResult = mysqli_query($con, $currentEmailQuery);
     $currentEmailRow = mysqli_fetch_assoc($currentEmailResult);
     $currentEmail = $currentEmailRow['patientEmail'];
 
-    if ($currentEmail != $patientEmail) {
-      // Email is being updated, check for uniqueness
-      $emailCheckQuery = "SELECT patientEmail FROM patient WHERE patientEmail = '$patientEmail'";
-      $emailCheckResult = mysqli_query($con, $emailCheckQuery);
+    // Check if the new patientEmail already exists
+    $emailCheckQuery = "SELECT patientEmail FROM patient WHERE patientEmail = '$patientEmail' AND id != '$id'";
+    $emailCheckResult = mysqli_query($con, $emailCheckQuery);
 
-      if (mysqli_num_rows($emailCheckResult) > 0) {
-        $_SESSION['errprompt'] = "Email already exists.";
-        header("location:profile.php");
-        exit;
-      }
+    $staffEmailCheckQuery = "SELECT staffEmail FROM staff WHERE staffEmail = '$patientEmail'";
+    $staffEmailCheckResult = mysqli_query($con, $staffEmailCheckQuery);
+
+    $doctorEmailCheckQuery = "SELECT doctorEmail FROM doctor WHERE doctorEmail = '$patientEmail'";
+    $doctorEmailCheckResult = mysqli_query($con, $doctorEmailCheckQuery);
+
+    if (mysqli_num_rows($emailCheckResult) > 0 || mysqli_num_rows($staffEmailCheckResult) > 0 || mysqli_num_rows($doctorEmailCheckResult) > 0) {
+      $_SESSION['errprompt'] = "Email already exists.";
+      header("location:profile.php");
+      exit;
     }
 
     // Continue with the rest of your update logic
@@ -60,6 +63,8 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
         patientName = '$patientName',
         patientEmail = '$patientEmail',
         patientPhone = '$patientPhone',
+        patientGender = '$patientGender',
+        patientRace = '$patientRace',
         patientAddress = '$patientAddress',
         password = '$password'
         WHERE id = '$id'";
@@ -71,6 +76,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
     } else {
       $_SESSION['errprompt'] = "Error updating information: " . mysqli_error($con);
       header("location:profile.php");
+      exit;
     }
   }
 
@@ -135,6 +141,8 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                           <h6>Name: <?php echo $patientName ?></h6>
                           <h6>Email: <?php echo $patientEmail ?></h6>
                           <h6>Phone Number: <?php echo $patientPhone ?></h6>
+                          <h6>Gender: <?php echo $patientGender ?></h6>
+                          <h6>Race: <?php echo $patientRace ?></h6>
                           <h6>Address: <?php echo $patientAddress ?></h6>
                         </div>
 
@@ -150,25 +158,59 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">IC Number</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="icPatient" type="text" value="<?php echo $icPatient ?>">
+                            <input class="form-control" name="icPatient" type="text" value="<?php echo $icPatient ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Full Name</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="patientName" type="text" value="<?php echo $patientName ?>">
+                            <input class="form-control" name="patientName" type="text" value="<?php echo $patientName ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Email</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="patientEmail" type="email" value="<?php echo $patientEmail ?>">
+                            <input class="form-control" name="patientEmail" type="email" value="<?php echo $patientEmail ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Phone Number</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="patientPhone" type="number" value="<?php echo $patientPhone ?>">
+                            <input class="form-control" name="patientPhone" type="number" value="<?php echo $patientPhone ?>" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-lg-3 col-form-label form-control-label">Gender</label>
+                          <div class="col-lg-9">
+                            <select name="patientGender" class="form-control input-shadow" required>
+                              <?php
+                              $patientGender = $patientGender;
+
+                              $options = ['Male', 'Female'];
+
+                              foreach ($options as $option) {
+                                $selected = ($patientGender == $option) ? 'selected' : '';
+                                echo "<option value=\"$option\" $selected>$option</option>";
+                              }
+                              ?>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-lg-3 col-form-label form-control-label">Gender</label>
+                          <div class="col-lg-9">
+                            <select name="patientRace" class="form-control input-shadow" required>
+                              <?php
+                              $patientRace = $patientRace;
+
+                              $options = ['Malay', 'Chinese', 'Indian', 'Other Bumiputera', 'Others'];
+
+                              foreach ($options as $option) {
+                                $selected = ($patientRace == $option) ? 'selected' : '';
+                                echo "<option value=\"$option\" $selected>$option</option>";
+                              }
+                              ?>
+                            </select>
                           </div>
                         </div>
                         <div class="form-group row">
@@ -181,7 +223,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Password</label>
                           <div class="col-lg-9">
-                            <input class="form-control" name="password" type="password" value="<?php echo $password ?>">
+                            <input class="form-control" name="password" type="password" value="<?php echo $password ?>" required>
                           </div>
                         </div>
                         <div class="form-group row">

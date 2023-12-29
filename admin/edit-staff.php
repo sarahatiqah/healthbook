@@ -16,22 +16,30 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
     $password = clean($_POST['password']);
     $staffAddress = clean($_POST['staffAddress']);
 
-    // Check if the email is being updated
-    $currentEmailQuery = "SELECT staffEmail FROM staff WHERE id = '$id'";
-    $currentEmailResult = mysqli_query($con, $currentEmailQuery);
-    $currentEmailRow = mysqli_fetch_assoc($currentEmailResult);
-    $currentEmail = $currentEmailRow['staffEmail'];
+    // Check if the new staffId already exists
+    $staffIdCheckQuery = "SELECT id FROM staff WHERE staffId = '$staffId' AND id != '$id'";
+    $staffIdCheckResult = mysqli_query($con, $staffIdCheckQuery);
 
-    if ($currentEmail != $staffEmail) {
-      // Email is being updated, check for uniqueness
-      $emailCheckQuery = "SELECT staffEmail FROM staff WHERE staffEmail = '$staffEmail'";
-      $emailCheckResult = mysqli_query($con, $emailCheckQuery);
+    if (mysqli_num_rows($staffIdCheckResult) > 0) {
+      $_SESSION['errprompt'] = "Staff ID already exists.";
+      header("location:edit-staff.php?id=" . $id);
+      exit;
+    }
 
-      if (mysqli_num_rows($emailCheckResult) > 0) {
-        $_SESSION['errprompt'] = "Email already exists.";
-        header("location:edit-staff.php?id=" . $id);
-        exit;
-      }
+    // Check if the new staffEmail already exists
+    $staffEmailCheckQuery = "SELECT staffEmail FROM staff WHERE staffEmail = '$staffEmail' AND id != '$id'";
+    $staffEmailCheckResult = mysqli_query($con, $staffEmailCheckQuery);
+
+    $patientEmailCheckQuery = "SELECT patientEmail FROM patient WHERE patientEmail = '$staffEmail'";
+    $patientEmailCheckResult = mysqli_query($con, $patientEmailCheckQuery);
+
+    $doctorEmailCheckQuery = "SELECT doctorEmail FROM doctor WHERE doctorEmail = '$staffEmail'";
+    $doctorEmailCheckResult = mysqli_query($con, $doctorEmailCheckQuery);
+
+    if (mysqli_num_rows($staffEmailCheckResult) > 0 || mysqli_num_rows($patientEmailCheckResult) > 0 || mysqli_num_rows($doctorEmailCheckResult) > 0) {
+      $_SESSION['errprompt'] = "Email already exists.";
+      header("location:edit-staff.php?id=" . $id);
+      exit;
     }
 
     // Continue with the rest of your update logic
@@ -53,6 +61,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
       header("location:edit-staff.php?id=" . $id);
     }
   }
+
 
 ?>
   <!DOCTYPE html>
