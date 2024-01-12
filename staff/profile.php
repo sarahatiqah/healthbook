@@ -189,7 +189,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label"></label>
                           <div class="col-lg-9">
-                            <a href="home.php" class="btn btn-secondary px-3">Cancel</a>
+                            <a href="profile.php" class="btn btn-secondary px-3">Cancel</a>
                             <input type="submit" class="btn btn-primary" name="save" value="Save Changes">
                           </div>
                         </div>
