@@ -96,9 +96,11 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
           </div>
 
 
-          <div class="mt-3">
-            <div id='calendar'></div>
-          </div>
+          <div class="card mt-3">
+						<div class="card-body">
+							<div id='calendar'></div>
+						</div>
+					</div>
           <!--End Dashboard Content-->
 
           <!--start overlay-->

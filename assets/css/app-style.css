@@ -34,7 +34,7 @@ File: app-style
   - Responsive
 */
 
-/* General */
+/* Custom */
 .link {
     color: #ff8800;
 }
@@ -325,7 +325,6 @@ hr {
 	padding-top: 70px;
 	padding-left: 10px;
     padding-right: 10px;
-    padding-bottom: 70px;
     overflow-x: hidden;
 	-webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;

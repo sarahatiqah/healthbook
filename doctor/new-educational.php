@@ -52,7 +52,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
         if (mysqli_stmt_execute($insertStmt)) {
           $_SESSION['prompt'] = "New educational resource added successfully.";
-          header("location:educational-resources.php");
+          header("location:resources.php");
           exit;
         } else {
           $_SESSION['errprompt'] = "Error adding a new resource: " . mysqli_error($con);
@@ -134,7 +134,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                     </div>
 
                     <div class="form-group">
-                      <a href="educational-resources.php" class="btn btn-secondary px-3">Cancel</a>
+                      <a href="resources.php" class="btn btn-secondary px-3">Cancel</a>
                       <input type="submit" class="btn btn-primary px-4" name="save" value="Upload" onclick="return confirmUpload()">
                     </div>
                   </form>

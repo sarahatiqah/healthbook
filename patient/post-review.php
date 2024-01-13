@@ -33,7 +33,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
       mysqli_commit($con);
 
       $_SESSION['prompt'] = "Thankyou for reviewing $doctorName.";
-      header("location:home.php");
+      header("location:dashboard.php");
       exit;
     } catch (Exception $e) {
       // Rollback the transaction on error

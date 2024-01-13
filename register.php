@@ -66,13 +66,13 @@ if (isset($_POST['register'])) {
 <?php
 if (isset($_SESSION['password'])) {
   if (isset($_SESSION['staffId']))
-    header("location:staff/home.php");
+    header("location:staff/dashboard.php");
   else if (isset($_SESSION['adminId']))
-    header("location:admin/home.php");
+    header("location:admin/dashboard.php");
   else if (isset($_SESSION['doctorId']))
-    header("location:doctor/home.php");
+    header("location:doctor/dashboard.php");
   else if (isset($_SESSION['id']))
-    header("location:patient/home.php");
+    header("location:patient/dashboard.php");
   exit;
 }
 ?>
