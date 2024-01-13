@@ -153,7 +153,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
             $appDate = (isset($_GET['appDate']) && $_GET['appDate'] !== null) ? $_GET['appDate'] : date('Y-m-d');
           ?>
             <div class="row mt-3">
-              <div class="col-lg-4">
+              <div class="col-lg-12">
                 <div class="card">
                   <div class="card-body">
                     <div class="card-title">Edit Appointment</div>

@@ -81,7 +81,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
           }
           ?>
           <div class="row mt-3">
-            <div class="col-lg-5">
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
                   <div class="card-title">COVID-19 Self-Assessment</div>

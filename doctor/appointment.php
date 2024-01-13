@@ -242,7 +242,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                             }
                           } else {
                             echo "<tr>";
-                            echo "<td colspan='6' style='text-align: center; color: red;'>No records found</td>";
+                            echo "<td colspan='7' style='text-align: center; color: red;'>No records found</td>";
                             echo "</tr>";
                           }
                         } else {

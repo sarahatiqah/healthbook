@@ -118,7 +118,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
             $formattedDate = date('j F Y', strtotime($appDate)) . " (" . date('l', strtotime($appDate)) . ")";
           ?>
             <div class="row mt-3">
-              <div class="col-lg-4">
+              <div class="col-lg-12">
                 <div class="card">
                   <div class="card-body">
                     <div class="card-title">Upload Receipt</div>

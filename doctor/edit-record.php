@@ -105,7 +105,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
             $formattedDate = date('d/m/Y', strtotime($appDate));
           ?>
             <div class="row mt-3">
-              <div class="col-lg-4">
+              <div class="col-lg-12">
                 <div class="card">
                   <div class="card-body">
                     <div class="card-title">Edit Record </div>

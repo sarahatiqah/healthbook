@@ -106,7 +106,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
           ?>
           <div class="row mt-3">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
                   <div class="card-title">Add New Educational Resources</div>

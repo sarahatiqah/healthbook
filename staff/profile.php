@@ -117,7 +117,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
           <div class="row mt-3">
 
 
-            <div class="col-lg-8">
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
                   <ul class="nav nav-tabs nav-tabs-primary top-icon nav-justified">
