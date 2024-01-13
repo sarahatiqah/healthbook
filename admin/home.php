@@ -170,11 +170,11 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
             $pdf->Ln(); // Move to the next line
           }
         } else {
-          // $_SESSION['prompt'] = "Not record on this month.";
+          // $_SESSION['prompt'] = "No record on this month.";
           // header("location: home.php");
 
           echo "<script type = \"text/javascript\">
-                                    alert(\"Not record on this month and year.\");
+                                    alert(\"No record on this month and year.\");
                                     window.location = (\"home.php\")
                                     </script>";
         }
