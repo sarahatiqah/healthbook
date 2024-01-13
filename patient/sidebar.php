@@ -2,8 +2,7 @@
 <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
     <div class="brand-logo">
         <a href="home.php">
-            <img src="../assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
-            <h5 class="logo-text">HealthBook</h5>
+            <img src="../assets/images/logo-icon.svg" class="w-50" alt="logo icon">
         </a>
     </div>
     <ul class="sidebar-menu do-nicescrol">
@@ -53,7 +52,7 @@
             </a>
         </li>
         <li>
-            <a href="chatbot.php">
+            <a href="conversation.php">
                 <i class="zmdi zmdi-attachment" aria-hidden="true"></i> <span>Chatbot</span>
             </a>
         </li>
