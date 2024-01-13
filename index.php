@@ -72,7 +72,7 @@ if (isset($_POST['login'])) {
     header("location: doctor/home.php");
     exit;
   } else {
-    $_SESSION['errprompt'] = "Wrong Email/ID or password.";
+    $_SESSION['errprompt'] = "Your credentials are incorrect.";
   }
 
   // Close the prepared statements
@@ -81,123 +81,71 @@ if (isset($_POST['login'])) {
 }
 ?>
 
-<body class="bg-theme bg-theme2">
-
-  <!-- start loader -->
-  <div id="pageloader-overlay" class="visible incoming">
-    <div class="loader-wrapper-outer">
-      <div class="loader-wrapper-inner">
-        <div class="loader"></div>
+<body class="bg-theme bg-theme9 vh-100 d-flex align-items-center">
+  <!-- Card -->
+  <div class="card card-authentication1 mx-auto p-2">
+    <div class="card-body">
+      <!-- Title -->
+      <div class="text-center">
+        <img src="assets/images/logo-icon.svg" class="w-50" alt="logo">
       </div>
+      <div class="card-title text-center py-3">Sign In Your Account</div>
+
+      <!-- Alerts -->
+      <?php
+      if (isset($_SESSION['prompt'])) {
+        showPrompt();
+      }
+      if (isset($_SESSION['errprompt'])) {
+        showError();
+      }
+      ?>
+
+      <!-- Form -->
+      <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+        <div class="form-group">
+          <label for="username">ID / Email</label>
+          <input type="text" name="username" class="form-control input-shadow" placeholder="Enter ID / Email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="position-relative has-icon-right">
+            <input type="password" name="password" class="form-control input-shadow" id="password" placeholder="Enter Password" required>
+            <div class="form-control-position toggle-password">
+              <i class="fa fa-eye" id="togglePassword"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group text-right">
+          <a href="reset-password.php">
+            <h6 class="link">Reset Password</h6>
+          </a>
+        </div>
+
+        <input class="btn btn-primary btn-block mt-4" type="submit" name="login" value="Sign In">
+      </form>
+    </div>
+
+    <div class="card-footer text-center border-0 pt-0">
+      <h6>Don't have an account? <a href="register.php" class="link">Sign up</a></h6>
     </div>
   </div>
-  <!-- end loader -->
+  <!-- Card -->
 
-  <!-- Start wrapper-->
-  <div id="wrapper">
+  <!-- Back To Top Button -->
+  <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i></a>
+  <!-- Back To Top Button -->
 
-    <div class="loader-wrapper">
-      <div class="lds-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-    <div class="card card-authentication1 mx-auto my-5">
-      <div class="card-body">
-        <div class="card-content p-2">
-          <div class="text-center">
-            <img src="assets/images/logo-icon.png" alt="logo icon">
-          </div>
-          <div class="card-title text-uppercase text-center py-3">HealthBook | LOGIN</div>
-          <?php
-
-          if (isset($_SESSION['prompt'])) {
-            showPrompt();
-          }
-
-          if (isset($_SESSION['errprompt'])) {
-            showError();
-          }
-
-          ?>
-          <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-            <div class="form-group">
-              <label for="username" class="sr-only">Username/Email</label>
-              <div class="position-relative has-icon-right">
-                <input type="text" name="username" class="form-control input-shadow" placeholder="Enter Username/Email" required>
-                <div class="form-control-position">
-                  <i class="icon-user"></i>
-                </div>
-              </div>
-            </div>
-            <style>
-              input::-ms-reveal,
-              input::-ms-clear {
-                display: none;
-              }
-
-              /* Add this CSS to your stylesheet */
-              .fa.fa-eye-slash::before {
-                content: "\f070";
-                /* Unicode for the eye-slash icon in Font Awesome */
-              }
-            </style>
-            <div class="form-group">
-              <label for="exampleInputPassword" class="sr-only">Password</label>
-              <div class="position-relative has-icon-right">
-                <input type="password" name="password" class="form-control input-shadow" id="myInput" placeholder="Enter Password" required>
-                <div class="form-control-position toggle-password">
-                  <i class="fa fa-eye" id="togglePassword"></i>
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-6">
-                <div class="icheck-material-white">
-                  <!-- <input type="checkbox" id="user-checkbox" checked="" />
-                <label for="user-checkbox">Remember me</label> -->
-                </div>
-              </div>
-              <div class="form-group col-6 text-right">
-                <a href="reset-password.php">Reset Password</a>
-              </div>
-            </div>
-            <!-- <button type="button" class="btn btn-light btn-block">LogIn</button> -->
-            <input class="btn  btn-success btn-block" type="submit" name="login" value="sign in">
-
-
-          </form>
-        </div>
-      </div>
-      <div class="card-footer text-center py-3">
-        <p class="text-warning mb-0">Do not have an account? <a href="register.php"> Register here</a></p>
-      </div>
-    </div>
-
-    <!--Start Back To Top Button-->
-    <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
-    <!--End Back To Top Button-->
-
-
-
-  </div><!--wrapper-->
-
-  <!-- Bootstrap core JavaScript-->
+  <!-- Bootstrap Core -->
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/popper.min.js"></script>
   <script src="assets/js/bootstrap.min.js"></script>
 
-  <!-- sidebar-menu js -->
-  <script src="assets/js/sidebar-menu.js"></script>
-
-  <!-- Custom scripts -->
-  <script src="assets/js/app-script.js"></script>
-
   <script>
     const togglePassword = document.querySelector('#togglePassword');
-    const password = document.querySelector('#myInput');
+    const password = document.querySelector('#password');
 
     togglePassword.addEventListener('click', function(e) {
       // toggle the type attribute
@@ -210,11 +158,10 @@ if (isset($_POST['login'])) {
 </body>
 
 </html>
-<?php
 
+<?php
 unset($_SESSION['prompt']);
 unset($_SESSION['errprompt']);
 
 mysqli_close($con);
-
 ?>
