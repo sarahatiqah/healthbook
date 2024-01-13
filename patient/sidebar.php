@@ -52,7 +52,7 @@
             </a>
         </li>
         <li>
-            <a href="chatbot.php">
+            <a href="conversation.php">
                 <i class="zmdi zmdi-attachment" aria-hidden="true"></i> <span>Chatbot</span>
             </a>
         </li>
