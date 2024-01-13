@@ -37,7 +37,8 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                     ?>
                     <div class="card">
                         <div class="card-body">
-                            <gradio-app src="https://u2005371-chatbot.hf.space"></gradio-app>
+                            <gradio-app src="https://u2005371-chatbot.hf.space" eager="true">
+                            </gradio-app>
                         </div>
                     </div>
                 </div>
