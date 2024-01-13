@@ -117,7 +117,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
             <div class="col-lg-8">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">List of Dependent</h5>
+                  <h5 class="card-title">List of Dependents</h5>
                   <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                       <thead>

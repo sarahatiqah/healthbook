@@ -129,7 +129,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
       <script>
         function confirmDelete() {
-          return confirm("Are you sure you want to delete this doctor?");
+          return confirm("Are you sure you want to delete this patient?");
         }
       </script>
 

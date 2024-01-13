@@ -130,7 +130,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">List of Appointment</h5>
+                  <h5 class="card-title">List of Appointments</h5>
                   <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                       <thead>
