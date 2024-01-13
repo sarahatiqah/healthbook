@@ -81,13 +81,27 @@ if (isset($_POST['login'])) {
 }
 ?>
 
+<?php
+if (isset($_SESSION['password'])) {
+  if (isset($_SESSION['staffId']))
+    header("location:staff/home.php");
+  else if (isset($_SESSION['adminId']))
+    header("location:admin/home.php");
+  else if (isset($_SESSION['doctorId']))
+    header("location:doctor/home.php");
+  else if (isset($_SESSION['id']))
+    header("location:patient/home.php");
+  exit;
+}
+?>
+
 <body class="bg-theme bg-theme9 vh-100 d-flex align-items-center">
   <!-- Card -->
   <div class="card card-authentication1 mx-auto p-2">
     <div class="card-body">
       <!-- Title -->
       <div class="text-center">
-        <img src="assets/images/logo-icon.svg" class="w-50" alt="logo">
+        <img src="assets/images/logo.svg" class="w-50" alt="logo">
       </div>
       <div class="card-title text-center py-3">Sign In Your Account</div>
 

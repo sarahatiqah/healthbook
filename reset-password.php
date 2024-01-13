@@ -2,6 +2,7 @@
 <html lang="en">
 
 <?php
+session_start();
 include "dbconnection.php";
 include "functions.php";
 include "head.php";
@@ -88,6 +89,8 @@ if (isset($_POST['forgot'])) {
 
 		if (isset($result_patient) || isset($result_staff) || isset($result_doctor)) {
 			$_SESSION['prompt'] = "Password reset successful. Please check your email.";
+			header("location:index.php");
+			exit;
 		} else {
 			$_SESSION['errprompt'] = "Database Error: " . mysqli_error($con);
 		}
@@ -97,12 +100,26 @@ if (isset($_POST['forgot'])) {
 }
 ?>
 
+<?php
+if (isset($_SESSION['password'])) {
+	if (isset($_SESSION['staffId']))
+		header("location:staff/home.php");
+	else if (isset($_SESSION['adminId']))
+		header("location:admin/home.php");
+	else if (isset($_SESSION['doctorId']))
+		header("location:doctor/home.php");
+	else if (isset($_SESSION['id']))
+		header("location:patient/home.php");
+	exit;
+}
+?>
+
 <body class="bg-theme bg-theme9 vh-100 d-flex align-items-center">
 	<div class="card card-authentication1 mx-auto p-2">
 		<div class="card-body">
 			<!-- Title -->
 			<div class="text-center">
-				<img src="assets/images/logo-icon.svg" class="w-50" alt="logo">
+				<img src="assets/images/logo.svg" class="w-50" alt="logo">
 			</div>
 			<div class="card-title text-center py-3">Reset Your Password</div>
 

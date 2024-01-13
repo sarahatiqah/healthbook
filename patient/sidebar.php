@@ -2,7 +2,7 @@
 <div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
     <div class="brand-logo">
         <a href="home.php">
-            <img src="../assets/images/logo-icon.svg" class="w-50" alt="logo icon">
+            <img src="../assets/images/logo.svg" class="w-50" alt="logo icon">
         </a>
     </div>
     <ul class="sidebar-menu do-nicescrol">

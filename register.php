@@ -61,7 +61,20 @@ if (isset($_POST['register'])) {
 
   mysqli_close($con); // Close the database connection
 }
+?>
 
+<?php
+if (isset($_SESSION['password'])) {
+  if (isset($_SESSION['staffId']))
+    header("location:staff/home.php");
+  else if (isset($_SESSION['adminId']))
+    header("location:admin/home.php");
+  else if (isset($_SESSION['doctorId']))
+    header("location:doctor/home.php");
+  else if (isset($_SESSION['id']))
+    header("location:patient/home.php");
+  exit;
+}
 ?>
 
 <body class="bg-theme bg-theme9 pb-4">
@@ -70,7 +83,7 @@ if (isset($_POST['register'])) {
     <div class="card-body">
       <!-- Title -->
       <div class="text-center">
-        <img src="assets/images/logo-icon.svg" class="w-50" alt="logo">
+        <img src="assets/images/logo.svg" class="w-50" alt="logo">
       </div>
       <div class="card-title text-center py-3">Register an Account</div>
 
