@@ -32,7 +32,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
     // Perform the delete operation
     $query = "DELETE FROM appointment WHERE appId = '$delete_id'";
     if (mysqli_query($con, $query)) {
-      $_SESSION['prompt'] = "Appointment Slot deleted successfully.";
+      $_SESSION['prompt'] = "Appointment deleted successfully.";
     } else {
       $_SESSION['errprompt'] = "Error deleting appointment.";
     }
@@ -84,7 +84,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Add </h5>
+                  <h5 class="card-title">List of My Appointments </h5>
                   <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                       <thead>
