@@ -5,14 +5,14 @@ session_start();
 require '../dbconnection.php';
 require '../functions.php';
 
-if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
+if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 ?>
   <!DOCTYPE html>
   <html lang="en">
 
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- Start wrapper-->
     <div id="wrapper">
@@ -21,22 +21,22 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
       include "sidebar.php";
       include "header.php";
 
-      $query = "SELECT COUNT(*) as total FROM appointment WHERE status='done' AND doctorID=$id";
+      $query = "SELECT COUNT(*) as total FROM appointment WHERE status='done'";
       $result = mysqli_query($con, $query);
       $row = mysqli_fetch_assoc($result);
       $countAppointmentDone = $row['total'];
 
-      $query2 = "SELECT COUNT(*) as total FROM appointment WHERE doctorID=$id";
+      $query2 = "SELECT COUNT(*) as total FROM appointment";
       $result2 = mysqli_query($con, $query2);
       $row2 = mysqli_fetch_assoc($result2);
       $countAppointment = $row2['total'];
 
-      $query3 = "SELECT COUNT(*) as total FROM appointment WHERE status='approved' AND doctorID=$id";
+      $query3 = "SELECT COUNT(*) as total FROM appointment WHERE status='approved'";
       $result3 = mysqli_query($con, $query3);
       $row3 = mysqli_fetch_assoc($result3);
       $countAppointmentApproved = $row3['total'];
 
-      $query4 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND doctorID=$id";
+      $query4 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending'";
       $result4 = mysqli_query($con, $query4);
       $row4 = mysqli_fetch_assoc($result4);
       $countAppointmentPending = $row4['total'];
@@ -44,7 +44,8 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
       $currentDateTime = new DateTime();
       $currentDate = $currentDateTime->format("Y-m-d");
       $currentTime = $currentDateTime->format("H:i:s");
-      $query5 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND (appDate > '$currentDate' OR (appDate = '$currentDate' AND appTime > '$currentTime')) AND doctorID=$id";
+      // $query5 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND appDate >= '$currentDate' AND appTime >= '$currentTime'";
+      $query5 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND (appDate > '$currentDate' OR (appDate = '$currentDate' AND appTime > '$currentTime'))";
       $result5 = mysqli_query($con, $query5);
       $row5 = mysqli_fetch_assoc($result5);
       $countAppointmentPendingUpcoming = $row5['total'];
@@ -94,9 +95,12 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
             </div>
           </div>
 
-          <div class="mt-3">
-            <div id='calendar'></div>
-          </div>
+
+          <div class="card mt-3">
+						<div class="card-body">
+							<div id='calendar'></div>
+						</div>
+					</div>
           <!--End Dashboard Content-->
 
           <!--start overlay-->
@@ -107,6 +111,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
         <!-- End container-fluid-->
 
       </div><!--End content-wrapper-->
+
 
 
       <style>
@@ -151,14 +156,10 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
       <?php include "footer.php";
 
-
       $query = "SELECT a.appDate, a.appTime, b.patientName
 FROM appointment a 
 JOIN patient b
-WHERE (a.status='approved' OR a.status='done') AND a.doctorID=$did AND a.patientid=b.id";
-
-
-
+WHERE (a.status='approved' OR a.status='done') AND a.patientid=b.id";
       $result = mysqli_query($con, $query);
 
       $events = array();
@@ -206,8 +207,6 @@ WHERE (a.status='approved' OR a.status='done') AND a.doctorID=$did AND a.patient
           });
         });
       </script>
-
-
   </body>
 
   </html>

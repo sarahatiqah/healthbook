@@ -21,8 +21,6 @@
     <link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
     <!-- Custom Style-->
     <link href="../assets/css/app-style.css" rel="stylesheet" />
-    <!-- Vector CSS -->
-    <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
     <!--Full Calendar Css-->
     <link href="../assets/plugins/fullcalendar/css/fullcalendar.min.css" rel='stylesheet' />
     <!-- Add this in the head section of your HTML -->

@@ -52,7 +52,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
           if (mysqli_stmt_execute($updateStmt)) {
             $_SESSION['prompt'] = "Educational resource updated successfully.";
-            header("location:educational-resources.php");
+            header("location:resources.php");
             exit;
           } else {
             $_SESSION['errprompt'] = "Error updating the resource: " . mysqli_error($con);
@@ -73,7 +73,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
       if (mysqli_stmt_execute($updateStmt)) {
         $_SESSION['prompt'] = "Educational resource updated successfully.";
-        header("location:educational-resources.php");
+        header("location:resources.php");
         exit;
       } else {
         $_SESSION['errprompt'] = "Error updating the resource: " . mysqli_error($con);
@@ -90,7 +90,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
   <html lang="en">
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- start loader -->
     <div id="pageloader-overlay" class="visible incoming">
@@ -160,7 +160,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                       <small style="color:#fff">Note: Separate keywords with a comma, space bar, or enter key</small>
                     </div>
                     <div class="form-group">
-                      <a href="educational-resources.php" class="btn btn-secondary px-3">Cancel</a>
+                      <a href="resources.php" class="btn btn-secondary px-3">Cancel</a>
                       <input type="submit" class="btn btn-primary px-4" name="save" value="Update" onclick="return confirmUpload()">
                     </div>
                   </form>

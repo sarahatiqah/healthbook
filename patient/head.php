@@ -17,8 +17,6 @@
     <link href="../assets/css/icons.css" rel="stylesheet" type="text/css" />
     <!-- Custom Style-->
     <link href="../assets/css/app-style.css" rel="stylesheet" />
-    <!-- Vector CSS -->
-    <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
     <!-- simplebar CSS-->
     <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
     <!-- Sidebar CSS-->

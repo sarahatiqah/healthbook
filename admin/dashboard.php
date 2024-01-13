@@ -14,7 +14,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- Start wrapper-->
     <div id="wrapper">
@@ -171,11 +171,11 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
           }
         } else {
           // $_SESSION['prompt'] = "No record on this month.";
-          // header("location: home.php");
+          // header("location: dashboard.php");
 
           echo "<script type = \"text/javascript\">
                                     alert(\"No record on this month and year.\");
-                                    window.location = (\"home.php\")
+                                    window.location = (\"dashboard.php\")
                                     </script>";
         }
 
@@ -208,7 +208,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
           ?>
           <!--Start Dashboard Content-->
 
-          <form method="post" action="?export=true">
+          <form method="post" action="?export=true" class="mt-3">
             <div class="d-flex justify-content-end">
 
               <select name="dateExport" class="btn btn-light px-3 mb-3 mr-2">

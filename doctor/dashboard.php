@@ -5,48 +5,44 @@ session_start();
 require '../dbconnection.php';
 require '../functions.php';
 
-if (isset($_SESSION['id'], $_SESSION['password'])) {
+if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 ?>
   <!DOCTYPE html>
   <html lang="en">
 
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
-
-    <!-- Start wrapper-->
+  <body class="bg-theme bg-theme9">
     <div id="wrapper">
 
       <?php
       include "sidebar.php";
       include "header.php";
 
-
-      $query = "SELECT COUNT(*) as total FROM doctor";
+      $query = "SELECT COUNT(*) as total FROM appointment WHERE status='done' AND doctorID=$id";
       $result = mysqli_query($con, $query);
       $row = mysqli_fetch_assoc($result);
-      $countDoctor = $row['total'];
+      $countAppointmentDone = $row['total'];
 
-      $query1 = "SELECT COUNT(*) as total FROM dependent WHERE patientId='" . $_SESSION['id'] . "'";
-      $result1 = mysqli_query($con, $query1);
-      $row1 = mysqli_fetch_assoc($result1);
-      $countDependent = $row1['total'];
-
-      $query2 = "SELECT COUNT(*) as total FROM appointment WHERE patientId='" . $_SESSION['id'] . "'";
+      $query2 = "SELECT COUNT(*) as total FROM appointment WHERE doctorID=$id";
       $result2 = mysqli_query($con, $query2);
       $row2 = mysqli_fetch_assoc($result2);
       $countAppointment = $row2['total'];
 
-      $query3 = "SELECT COUNT(*) as total FROM educational";
+      $query3 = "SELECT COUNT(*) as total FROM appointment WHERE status='approved' AND doctorID=$id";
       $result3 = mysqli_query($con, $query3);
       $row3 = mysqli_fetch_assoc($result3);
-      $countER = $row3['total'];
+      $countAppointmentApproved = $row3['total'];
 
+      $query4 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND doctorID=$id";
+      $result4 = mysqli_query($con, $query4);
+      $row4 = mysqli_fetch_assoc($result4);
+      $countAppointmentPending = $row4['total'];
 
       $currentDateTime = new DateTime();
       $currentDate = $currentDateTime->format("Y-m-d");
       $currentTime = $currentDateTime->format("H:i:s");
-      $query5 = "SELECT COUNT(*) as total FROM appointment WHERE status='approved' AND (appDate > '$currentDate' OR (appDate = '$currentDate' AND appTime > '$currentTime')) AND patientId='" . $_SESSION['id'] . "'";
+      $query5 = "SELECT COUNT(*) as total FROM appointment WHERE status='pending' AND (appDate > '$currentDate' OR (appDate = '$currentDate' AND appTime > '$currentTime')) AND doctorID=$id";
       $result5 = mysqli_query($con, $query5);
       $row5 = mysqli_fetch_assoc($result5);
       $countAppointmentPendingUpcoming = $row5['total'];
@@ -58,13 +54,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 
       <div class="content-wrapper">
         <div class="container-fluid">
-          <?php
-          if (isset($_SESSION['errprompt'])) {
-            showError();
-          } elseif (isset($_SESSION['prompt'])) {
-            showPrompt();
-          }
-          ?>
+
           <!--Start Dashboard Content-->
 
           <div class="card mt-3">
@@ -72,42 +62,41 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
               <div class="row row-group m-0">
                 <div class="col-12 col-lg-6 col-xl-3 border-light">
                   <div class="card-body">
-                    <h5 class="text-white mb-0"><?php echo $countDependent ?> <span class="float-right"><i class="fa fa-users"></i></span></h5>
-
-                    <p class="mb-0 text-white small-font">Total Dependent </p>
-                  </div>
-                </div>
-                <div class="col-12 col-lg-6 col-xl-3 border-light">
-                  <div class="card-body">
-                    <h5 class="text-white mb-0"><?php echo $countDoctor ?> <span class="float-right"><i class="fa fa-user-md"></i> </span></h5>
-
-                    <p class="mb-0 text-white small-font">Total Doctor</p>
-                  </div>
-                </div>
-                <div class="col-12 col-lg-6 col-xl-3 border-light">
-                  <div class="card-body">
                     <h5 class="text-white mb-0"><?php echo $countAppointment ?> <span class="float-right"><i class="zmdi zmdi-calendar"></i></span></h5>
 
-                    <p class="mb-0 text-white small-font">Total My Appointment</p>
+                    <p class="mb-0 text-white small-font">Total Appointment</p>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6 col-xl-3 border-light">
                   <div class="card-body">
-                    <h5 class="text-white mb-0"><?php echo $countER ?> <span class="float-right"><i class="zmdi zmdi-attachment"></i></span></h5>
+                    <h5 class="text-white mb-0"><?php echo $countAppointmentDone ?> <span class="float-right"><i class="zmdi zmdi-badge-check"></i></span></h5>
 
-                    <p class="mb-0 text-white small-font">Total Educational Resources</p>
+                    <p class="mb-0 text-white small-font">Total Done Appointment</p>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3 border-light">
+                  <div class="card-body">
+                    <h5 class="text-white mb-0"><?php echo $countAppointmentApproved ?> <span class="float-right"><i class="zmdi zmdi-case-check"></i></span></h5>
+
+                    <p class="mb-0 text-white small-font">Total Approved Appointment</p>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-3 border-light">
+                  <div class="card-body">
+                    <h5 class="text-white mb-0"><?php echo $countAppointmentPending ?> <span class="float-right"><i class="zmdi zmdi-spinner"></i></span></h5>
+
+                    <p class="mb-0 text-white small-font">Total Pending Appointment</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-
-          <div class="mt-3">
-            <div id='calendar'></div>
-          </div>
-
-
+          <div class="card mt-3">
+						<div class="card-body">
+							<div id='calendar'></div>
+						</div>
+					</div>
           <!--End Dashboard Content-->
 
           <!--start overlay-->
@@ -140,7 +129,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 
             <!-- Modal Body -->
             <div class="modal-body">
-              <p style="color: black;">You have <span style="color: red;"><?php echo $countAppointmentPendingUpcoming ?></span> new upcoming appointment to be attend.
+              <p style="color: black;">You have <span style="color: red;"><?php echo $countAppointmentPendingUpcoming ?></span> new upcoming appointment to be approved.
                 <a href="appointment.php" style="color: blue;">Click here for more details</a>
               </p>
             </div>
@@ -155,7 +144,6 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
       </div>
 
 
-
       <!--Start Back To Top Button-->
       <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
       <!--End Back To Top Button-->
@@ -163,14 +151,14 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 
       <?php include "footer.php";
 
-      // $query = "SELECT a.appDate, a.appTime, b.doctorName FROM appointment a 
-      //   JOIN doctor b
-      //   WHERE a.status='approved' OR a.status='done' AND a.doctorID=b.id AND a.patientId='" . $_SESSION['id'] . "'";
 
-      $query = "SELECT a.appDate, a.appTime, b.doctorName, a.patientId
-        FROM appointment a
-        JOIN doctor b ON a.doctorID = b.id
-        WHERE (a.status = 'approved' OR a.status = 'done') AND a.patientId='" . $_SESSION['id'] . "'";
+      $query = "SELECT a.appDate, a.appTime, b.patientName
+FROM appointment a 
+JOIN patient b
+WHERE (a.status='approved' OR a.status='done') AND a.doctorID=$did AND a.patientid=b.id";
+
+
+
       $result = mysqli_query($con, $query);
 
       $events = array();
@@ -180,7 +168,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 
         // Map your database fields to FullCalendar properties
         $event = array(
-          'title' =>   $formattedTime . ': ' . $row['doctorName'],
+          'title' =>   $formattedTime . ': ' . $row['patientName'],
           'start' => $row['appDate'] . 'T' . $row['appTime'], // Combine date and time
           'end' => $row['appDate'] . 'T' . $row['appTime'], // You may adjust this based on your needs
         );
@@ -220,7 +208,6 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
       </script>
 
 
-
   </body>
 
   </html>
@@ -233,6 +220,6 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 }
 
 unset($_SESSION['prompt']);
-unset($_SESSION['errprompt']);
 mysqli_close($con);
+
 ?>

@@ -18,7 +18,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
       $_SESSION['errprompt'] = "Error deleting Educational Resources.";
     }
 
-    header("location: educational-resources.php");
+    header("location: resources.php");
     exit;
   }
 ?>
@@ -26,7 +26,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
   <html lang="en">
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- start loader -->
     <div id="pageloader-overlay" class="visible incoming">
@@ -100,7 +100,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
                               $editButton = "<a href='edit-educational.php?id_educational={$id_educational}' class='btn btn-warning'><i class='icon-eye'></i> Edit</a> ";
 
-                              $deleteButton = "<a href='educational-resources.php?delete_id={$id_educational}' class='btn btn-danger' onclick='return confirmDelete();'><i class='icon-trash'></i> </a>";
+                              $deleteButton = "<a href='resources.php?delete_id={$id_educational}' class='btn btn-danger' onclick='return confirmDelete();'><i class='icon-trash'></i> </a>";
 
 
                               echo "<tr>";

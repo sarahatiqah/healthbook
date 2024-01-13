@@ -12,7 +12,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 
     <?php include "head.php"; ?>
 
-    <body class="bg-theme bg-theme2">
+    <body class="bg-theme bg-theme9">
         <!-- Scripts -->
         <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/4.13.0/gradio.js">
         </script>

@@ -45,7 +45,7 @@ if (isset($_POST['login'])) {
     $_SESSION['patientEmail'] = $row['patientEmail'];
     $_SESSION['patientName'] = $row['patientName'];
     $_SESSION['password'] = $row['password'];
-    header("location: patient/home.php");
+    header("location: patient/dashboard.php");
     exit;
   } elseif (mysqli_num_rows($resultAdmins) > 0) {
     $row = mysqli_fetch_assoc($resultAdmins);
@@ -53,7 +53,7 @@ if (isset($_POST['login'])) {
     $_SESSION['adminId'] = $row['adminId'];
     $_SESSION['adminName'] = $row['adminName'];
     $_SESSION['password'] = $row['password'];
-    header("location: admin/home.php");
+    header("location: admin/dashboard.php");
     exit;
   } elseif (mysqli_num_rows($resultStaff) > 0) {
     $row = mysqli_fetch_assoc($resultStaff);
@@ -61,7 +61,7 @@ if (isset($_POST['login'])) {
     $_SESSION['staffId'] = $row['staffId'];
     $_SESSION['staffName'] = $row['staffName'];
     $_SESSION['password'] = $row['password'];
-    header("location: staff/home.php");
+    header("location: staff/dashboard.php");
     exit;
   } elseif (mysqli_num_rows($resultDoctor) > 0) {
     $row = mysqli_fetch_assoc($resultDoctor);
@@ -69,7 +69,7 @@ if (isset($_POST['login'])) {
     $_SESSION['doctorId'] = $row['doctorId'];
     $_SESSION['doctorName'] = $row['doctorName'];
     $_SESSION['password'] = $row['password'];
-    header("location: doctor/home.php");
+    header("location: doctor/dashboard.php");
     exit;
   } else {
     $_SESSION['errprompt'] = "Your credentials are incorrect.";
@@ -84,13 +84,13 @@ if (isset($_POST['login'])) {
 <?php
 if (isset($_SESSION['password'])) {
   if (isset($_SESSION['staffId']))
-    header("location:staff/home.php");
+    header("location:staff/dashboard.php");
   else if (isset($_SESSION['adminId']))
-    header("location:admin/home.php");
+    header("location:admin/dashboard.php");
   else if (isset($_SESSION['doctorId']))
-    header("location:doctor/home.php");
+    header("location:doctor/dashboard.php");
   else if (isset($_SESSION['id']))
-    header("location:patient/home.php");
+    header("location:patient/dashboard.php");
   exit;
 }
 ?>
@@ -133,7 +133,7 @@ if (isset($_SESSION['password'])) {
         </div>
 
         <div class="form-group text-right">
-          <a href="reset-password.php">
+          <a href="reset-password.php" class="d-inline-block">
             <h6 class="link">Reset Password</h6>
           </a>
         </div>

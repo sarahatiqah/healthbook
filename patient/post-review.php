@@ -33,7 +33,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
       mysqli_commit($con);
 
       $_SESSION['prompt'] = "Thankyou for reviewing $doctorName.";
-      header("location:home.php");
+      header("location:dashboard.php");
       exit;
     } catch (Exception $e) {
       // Rollback the transaction on error
@@ -56,7 +56,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
   <html lang="en">
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- start loader -->
     <div id="pageloader-overlay" class="visible incoming">
