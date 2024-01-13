@@ -4,10 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+
     <title>HealthBook</title>
-    <!-- loader-->
-    <link href="../assets/css/pace.min.css" rel="stylesheet" />
-    <script src="../assets/js/pace.min.js"></script>
+    
     <!--favicon-->
     <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
     <!-- Bootstrap core CSS-->
@@ -24,5 +23,4 @@
     <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
     <!-- Sidebar CSS-->
     <link href="../assets/css/sidebar-menu.css" rel="stylesheet" />
-
 </head>
