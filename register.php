@@ -64,9 +64,9 @@ if (isset($_POST['register'])) {
 
 ?>
 
-<body class="bg-theme bg-theme9">
+<body class="bg-theme bg-theme9 pb-4">
   <!-- Card -->
-  <div class="card card-authentication1 mx-auto p-2 my-4">
+  <div class="card card-authentication1 mx-auto p-2 mt-4 mb-0">
     <div class="card-body">
       <!-- Title -->
       <div class="text-center">
