@@ -70,7 +70,7 @@ if (isset($_POST['register'])) {
     <div class="card-body">
       <!-- Title -->
       <div class="text-center">
-        <img src="assets/images/logo-icon.svg" class="w-50" alt="logo">
+        <img src="assets/images/logo.svg" class="w-50" alt="logo">
       </div>
       <div class="card-title text-center py-3">Register an Account</div>
 
