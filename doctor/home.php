@@ -26,7 +26,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
       $row = mysqli_fetch_assoc($result);
       $countAppointmentDone = $row['total'];
 
-      $query2 = "SELECT COUNT(*) as total FROM appointment";
+      $query2 = "SELECT COUNT(*) as total FROM appointment WHERE doctorID=$id";
       $result2 = mysqli_query($con, $query2);
       $row2 = mysqli_fetch_assoc($result2);
       $countAppointment = $row2['total'];
