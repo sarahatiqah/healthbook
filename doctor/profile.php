@@ -81,7 +81,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- start loader -->
     <div id="pageloader-overlay" class="visible incoming">

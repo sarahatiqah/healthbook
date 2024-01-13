@@ -14,7 +14,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
 
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- Start wrapper-->
     <div id="wrapper">

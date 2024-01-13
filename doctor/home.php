@@ -12,7 +12,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
   <?php include "head.php"; ?>
 
-  <body class="bg-theme bg-theme2">
+  <body class="bg-theme bg-theme9">
 
     <!-- Start wrapper-->
     <div id="wrapper">
