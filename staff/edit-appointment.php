@@ -5,12 +5,12 @@ session_start();
 require '../dbconnection.php';
 require '../functions.php';
 
+// Import PHPMailer into global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/PHPMailer/src/Exception.php';
-require '../vendor/PHPMailer/src/PHPMailer.php';
-require '../vendor/PHPMailer/src/SMTP.php';
+// Load Composer's autoloader
+require '../vendor/autoload.php';
 
 if (isset($_SESSION['staffId'], $_SESSION['password'])) {
   $idapp = $_GET['id'];
@@ -54,9 +54,6 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
       // Send password reset email
       $subject = "APPOINTMENT CHANGED";
       $message = "Your appointment has been changed to: <br>Date: " . $formattedDateEmail . "<br>Time: " . $formattedTimeEmail . "<br>Doctor: " . $doctorName;
-
-      // Load composer's autoloader
-      require '../vendor/autoload.php';
 
       $mail = new PHPMailer(true);
 

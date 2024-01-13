@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <?php
 include "dbconnection.php";
 include "functions.php";
 include "head.php";
 
+// Import PHPMailer into global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/PHPMailer/src/Exception.php';
-require 'vendor/PHPMailer/src/PHPMailer.php';
-require 'vendor/PHPMailer/src/SMTP.php';
+// Load Composer's autoloader
+require __DIR__ . '/vendor/autoload.php';
 
 if (isset($_POST['forgot'])) {
 	$email_reset = $_POST['email_reset'];
@@ -53,9 +54,6 @@ if (isset($_POST['forgot'])) {
 		// Send password reset email
 		$subject = "Reset Password";
 		$message = "Here is your new password:<br>New Password: " . $newpassword;
-
-		// Load composer's autoloader
-		require 'vendor/autoload.php';
 
 		$mail = new PHPMailer(true);
 
