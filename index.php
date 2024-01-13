@@ -81,6 +81,20 @@ if (isset($_POST['login'])) {
 }
 ?>
 
+<?php
+if (isset($_SESSION['password'])) {
+  if (isset($_SESSION['staffId']))
+    header("location:staff/home.php");
+  else if (isset($_SESSION['adminId']))
+    header("location:admin/home.php");
+  else if (isset($_SESSION['doctorId']))
+    header("location:doctor/home.php");
+  else if (isset($_SESSION['id']))
+    header("location:patient/home.php");
+  exit;
+}
+?>
+
 <body class="bg-theme bg-theme9 vh-100 d-flex align-items-center">
   <!-- Card -->
   <div class="card card-authentication1 mx-auto p-2">

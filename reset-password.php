@@ -2,6 +2,7 @@
 <html lang="en">
 
 <?php
+session_start();
 include "dbconnection.php";
 include "functions.php";
 include "head.php";
@@ -88,12 +89,28 @@ if (isset($_POST['forgot'])) {
 
 		if (isset($result_patient) || isset($result_staff) || isset($result_doctor)) {
 			$_SESSION['prompt'] = "Password reset successful. Please check your email.";
+			header("location:index.php");
+			exit;
 		} else {
 			$_SESSION['errprompt'] = "Database Error: " . mysqli_error($con);
 		}
 	}
 
 	mysqli_close($con); // Close the database connection
+}
+?>
+
+<?php
+if (isset($_SESSION['password'])) {
+	if (isset($_SESSION['staffId']))
+		header("location:staff/home.php");
+	else if (isset($_SESSION['adminId']))
+		header("location:admin/home.php");
+	else if (isset($_SESSION['doctorId']))
+		header("location:doctor/home.php");
+	else if (isset($_SESSION['id']))
+		header("location:patient/home.php");
+	exit;
 }
 ?>
 
