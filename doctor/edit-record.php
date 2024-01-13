@@ -108,7 +108,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
               <div class="col-lg-4">
                 <div class="card">
                   <div class="card-body">
-                    <div class="card-title">Add New Record </div>
+                    <div class="card-title">Edit Record </div>
                     <hr>
                     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data">
                       <input type="hidden" name="id" value="<?php echo $idapp ?>">

@@ -173,7 +173,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label class="col-lg-3 col-form-label form-control-label">Address</label>
+                          <label class="col-lg-3 col-form-label form-control-label">Specialization</label>
                           <div class="col-lg-9">
                             <select class="form-control" name="specialization" required>
                               <option value="" selected disabled>Select Specialization</option>
