@@ -19,12 +19,12 @@
          </li>
          <li>
              <a href="patients.php">
-                 <i class="fa fa-users"></i><span>Patients</span>
+                 <i class="fa fa-users"></i><span>Patient</span>
              </a>
          </li>
          <li>
              <a href="educational-resources.php">
-                 <i class="zmdi zmdi-attachment"></i> <span>Educational Resources</span>
+                 <i class="zmdi zmdi-attachment"></i> <span>Educational Resource</span>
              </a>
          </li>
          <!-- <li>

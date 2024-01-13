@@ -14,7 +14,7 @@
         </li>
         <li>
             <a href="doctors.php">
-                <i class="fa fa-user-md" aria-hidden="true"></i><span>Doctors</span>
+                <i class="fa fa-user-md" aria-hidden="true"></i><span>Doctor</span>
             </a>
         </li>
         <li>
@@ -32,7 +32,7 @@
          </li> -->
         <li>
             <a href="dependent.php">
-                <i class="zmdi zmdi-accounts-list-alt" aria-hidden="true"></i> <span>Dependents</span>
+                <i class="zmdi zmdi-accounts-list-alt" aria-hidden="true"></i> <span>Dependent</span>
             </a>
         </li>
 
@@ -43,12 +43,12 @@
         </li>
         <li>
             <a href="health-metrics.php">
-                <i class="zmdi zmdi-male" aria-hidden="true"></i> <span>Health Metrics</span>
+                <i class="zmdi zmdi-male" aria-hidden="true"></i> <span>Health Metric</span>
             </a>
         </li>
         <li>
             <a href="educational-resources.php">
-                <i class="zmdi zmdi-attachment" aria-hidden="true"></i> <span>Educational Resources</span>
+                <i class="zmdi zmdi-attachment" aria-hidden="true"></i> <span>Educational Resource</span>
             </a>
         </li>
         <li>

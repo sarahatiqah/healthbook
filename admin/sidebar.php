@@ -15,7 +15,7 @@
 
          <li>
              <a href="doctors.php">
-                 <i class="zmdi zmdi-accounts-list-alt"></i> <span>Doctors</span>
+                 <i class="zmdi zmdi-accounts-list-alt"></i> <span>Doctor</span>
              </a>
          </li>
          <li>
@@ -25,7 +25,7 @@
          </li>
          <li>
              <a href="patients.php">
-                 <i class="fa fa-users"></i><span>Patients</span>
+                 <i class="fa fa-users"></i><span>Patient</span>
              </a>
          </li>
          <!-- <li>
