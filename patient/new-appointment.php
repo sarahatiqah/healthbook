@@ -16,7 +16,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
     $dependentID = isset($_POST['dependentID']) ? clean($_POST['dependentID']) : null;
     $doctorID = clean($_POST['doctorID']);
     $id_specialization = clean($_POST['id_specialization']);
-
+    $appType = "new";
 
     $checkQuery = "SELECT * FROM appointment WHERE appDate = ? AND appTime = ? AND patientId = ?";
     $checkStmt = mysqli_prepare($con, $checkQuery);
@@ -33,7 +33,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 
     $insertQuery = "INSERT INTO appointment (patientId, appDate, appTime, doctorID, dependentID, appType) VALUES (?, ?, ?, ?, ?, ?)";
     $insertStmt = mysqli_prepare($con, $insertQuery);
-    mysqli_stmt_bind_param($insertStmt, "ssssss", $patientID, $appDate, $appTime, $doctorID, $dependentID, "new");
+    mysqli_stmt_bind_param($insertStmt, "ssssss", $patientID, $appDate, $appTime, $doctorID, $dependentID, $appType);
 
     if (mysqli_stmt_execute($insertStmt)) {
       $_SESSION['prompt'] = "New appointment added successfully.";

@@ -58,7 +58,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                         $sqlMetrics = "SELECT medical_issues FROM health_metrics WHERE patientId='" . $_SESSION['id'] . "'";
                         $resultMetrics = mysqli_query($con, $sqlMetrics);
 
-                        $sqlRecords = "SELECT a.diagnosis FROM records a JOIN appointment b WHERE a.appId=b.appId AND b.patientId='" . $_SESSION['id'] . "'";
+                        $sqlRecords = "SELECT a.diagnosis FROM records a JOIN appointment b WHERE a.app_id=b.appId AND b.patientId='" . $_SESSION['id'] . "'";
                         $resultRecords = mysqli_query($con, $sqlRecords);
                         $issues = "";
                         echo 'Your diagnosis is: <b>';
