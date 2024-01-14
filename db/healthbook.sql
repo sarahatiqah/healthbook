@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Dec 18, 2023 at 06:00 AM
--- Server version: 5.7.33
--- PHP Version: 8.2.10
+-- Host: 127.0.0.1
+-- Generation Time: Jan 14, 2024 at 10:42 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,20 @@ SET time_zone = "+00:00";
 --
 -- Database: `healthbook`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `addendums`
+--
+
+CREATE TABLE `addendums` (
+  `addId` int(11) NOT NULL,
+  `recordId` int(11) NOT NULL,
+  `doctorId` bigint(20) NOT NULL,
+  `content` text NOT NULL,
+  `createdAt` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -51,31 +65,12 @@ CREATE TABLE `appointment` (
   `appId` int(11) NOT NULL,
   `patientId` int(11) NOT NULL,
   `dependentID` int(11) DEFAULT NULL,
+  `appType` varchar(50) NOT NULL,
   `appDate` date DEFAULT NULL,
   `appTime` time DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'pending',
   `doctorID` bigint(20) NOT NULL,
   `receipt` varchar(500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `assessment_data`
---
-
-CREATE TABLE `assessment_data` (
-  `id_assesment` int(11) NOT NULL,
-  `symptoms` varchar(255) NOT NULL,
-  `type_of_symptoms` varchar(1000) DEFAULT NULL,
-  `contact` varchar(3) DEFAULT NULL,
-  `travel` varchar(3) DEFAULT NULL,
-  `exposure` varchar(3) DEFAULT NULL,
-  `hygiene` varchar(3) DEFAULT NULL,
-  `symptom_duration` varchar(20) DEFAULT NULL,
-  `assessmentResult` varchar(1000) NOT NULL,
-  `patientID` int(11) NOT NULL,
-  `date_assessment` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -181,12 +176,16 @@ CREATE TABLE `patient` (
 --
 
 CREATE TABLE `records` (
-  `id_record` int(11) NOT NULL,
-  `appId` int(11) NOT NULL,
-  `diagnosis` varchar(1000) NOT NULL,
-  `clarification` varchar(1000) DEFAULT NULL,
-  `clinical_progress` varchar(1000) DEFAULT NULL,
-  `care_plan` varchar(1000) DEFAULT NULL
+  `record_id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `doctor_id` bigint(20) NOT NULL,
+  `app_id` int(11) NOT NULL,
+  `record_type` varchar(50) NOT NULL,
+  `diagnosis` text DEFAULT NULL,
+  `note_clarification` text NOT NULL,
+  `clinical_progress` text NOT NULL,
+  `care_plan` text NOT NULL,
+  `created_at` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -252,6 +251,14 @@ INSERT INTO `staff` (`id`, `staffId`, `password`, `staffName`, `staffEmail`, `st
 --
 
 --
+-- Indexes for table `addendums`
+--
+ALTER TABLE `addendums`
+  ADD PRIMARY KEY (`addId`),
+  ADD KEY `FK_add_doctor` (`doctorId`),
+  ADD KEY `FK_add_record` (`recordId`);
+
+--
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
@@ -265,13 +272,6 @@ ALTER TABLE `appointment`
   ADD KEY `FK_pid` (`patientId`),
   ADD KEY `FK_did` (`doctorID`),
   ADD KEY `FK_dependent` (`dependentID`);
-
---
--- Indexes for table `assessment_data`
---
-ALTER TABLE `assessment_data`
-  ADD PRIMARY KEY (`id_assesment`),
-  ADD KEY `FK_patient_assessment` (`patientID`);
 
 --
 -- Indexes for table `dependent`
@@ -311,8 +311,10 @@ ALTER TABLE `patient`
 -- Indexes for table `records`
 --
 ALTER TABLE `records`
-  ADD PRIMARY KEY (`id_record`),
-  ADD KEY `FK_appID` (`appId`);
+  ADD PRIMARY KEY (`record_id`),
+  ADD KEY `FK_appId` (`app_id`),
+  ADD KEY `FK_patId` (`patient_id`),
+  ADD KEY `FK_docId` (`doctor_id`);
 
 --
 -- Indexes for table `reviews`
@@ -338,6 +340,12 @@ ALTER TABLE `staff`
 --
 
 --
+-- AUTO_INCREMENT for table `addendums`
+--
+ALTER TABLE `addendums`
+  MODIFY `addId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
@@ -347,13 +355,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `appId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `assessment_data`
---
-ALTER TABLE `assessment_data`
-  MODIFY `id_assesment` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `appId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `dependent`
@@ -383,13 +385,13 @@ ALTER TABLE `health_metrics`
 -- AUTO_INCREMENT for table `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `records`
 --
 ALTER TABLE `records`
-  MODIFY `id_record` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -414,18 +416,19 @@ ALTER TABLE `staff`
 --
 
 --
+-- Constraints for table `addendums`
+--
+ALTER TABLE `addendums`
+  ADD CONSTRAINT `FK_add_doctor` FOREIGN KEY (`doctorId`) REFERENCES `doctor` (`id`),
+  ADD CONSTRAINT `FK_add_record` FOREIGN KEY (`recordId`) REFERENCES `records` (`record_id`);
+
+--
 -- Constraints for table `appointment`
 --
 ALTER TABLE `appointment`
   ADD CONSTRAINT `FK_dependent` FOREIGN KEY (`dependentID`) REFERENCES `dependent` (`id_dependent`),
   ADD CONSTRAINT `FK_did` FOREIGN KEY (`doctorID`) REFERENCES `doctor` (`id`),
   ADD CONSTRAINT `FK_pid` FOREIGN KEY (`patientId`) REFERENCES `patient` (`id`);
-
---
--- Constraints for table `assessment_data`
---
-ALTER TABLE `assessment_data`
-  ADD CONSTRAINT `FK_patient_assessment` FOREIGN KEY (`patientID`) REFERENCES `patient` (`id`);
 
 --
 -- Constraints for table `dependent`
@@ -455,7 +458,9 @@ ALTER TABLE `health_metrics`
 -- Constraints for table `records`
 --
 ALTER TABLE `records`
-  ADD CONSTRAINT `FK_appID` FOREIGN KEY (`appId`) REFERENCES `appointment` (`appId`);
+  ADD CONSTRAINT `FK_appId` FOREIGN KEY (`app_id`) REFERENCES `appointment` (`appId`),
+  ADD CONSTRAINT `FK_docId` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`),
+  ADD CONSTRAINT `FK_patId` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`);
 
 --
 -- Constraints for table `reviews`
