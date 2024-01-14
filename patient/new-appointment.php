@@ -31,9 +31,9 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
       exit;
     }
 
-    $insertQuery = "INSERT INTO appointment (patientId, appDate, appTime, doctorID, dependentID) VALUES (?, ?, ?, ?, ?)";
+    $insertQuery = "INSERT INTO appointment (patientId, appDate, appTime, doctorID, dependentID, appType) VALUES (?, ?, ?, ?, ?, ?)";
     $insertStmt = mysqli_prepare($con, $insertQuery);
-    mysqli_stmt_bind_param($insertStmt, "sssss", $patientID, $appDate, $appTime, $doctorID, $dependentID);
+    mysqli_stmt_bind_param($insertStmt, "ssssss", $patientID, $appDate, $appTime, $doctorID, $dependentID, "new");
 
     if (mysqli_stmt_execute($insertStmt)) {
       $_SESSION['prompt'] = "New appointment added successfully.";

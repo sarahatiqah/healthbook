@@ -7,8 +7,6 @@
 <script src="../assets/plugins/simplebar/js/simplebar.js"></script>
 <!-- sidebar-menu js -->
 <script src="../assets/js/sidebar-menu.js"></script>
-<!-- loader scripts -->
-<script src="../assets/js/jquery.loading-indicator.js"></script>
 <!-- Custom scripts -->
 <script src="../assets/js/app-script.js"></script>
 <!-- Full Calendar -->

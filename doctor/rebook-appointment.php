@@ -30,13 +30,13 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
 
     if ($dependentID != NULL) {
-      $insertQuery = "INSERT INTO appointment (patientId, appDate, appTime, doctorID, dependentID) VALUES (?, ?, ?, ?, ?)";
+      $insertQuery = "INSERT INTO appointment (patientId, appDate, appTime, doctorID, dependentID, appType) VALUES (?, ?, ?, ?, ?, ?)";
       $insertStmt = mysqli_prepare($con, $insertQuery);
-      mysqli_stmt_bind_param($insertStmt, "sssss", $patientID, $appDate, $appTime, $doctorID, $dependentID);
+      mysqli_stmt_bind_param($insertStmt, "ssssss", $patientID, $appDate, $appTime, $doctorID, $dependentID, "recurrent");
     } else {
-      $insertQuery = "INSERT INTO appointment (patientId, appDate, appTime, doctorID) VALUES (?, ?, ?, ?)";
+      $insertQuery = "INSERT INTO appointment (patientId, appDate, appTime, doctorID, appType) VALUES (?, ?, ?, ?, ?)";
       $insertStmt = mysqli_prepare($con, $insertQuery);
-      mysqli_stmt_bind_param($insertStmt, "ssss", $patientID, $appDate, $appTime, $doctorID);
+      mysqli_stmt_bind_param($insertStmt, "sssss", $patientID, $appDate, $appTime, $doctorID, "recurrent");
     }
 
 
