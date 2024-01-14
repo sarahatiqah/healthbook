@@ -4,6 +4,24 @@ session_start();
 require '../dbconnection.php';
 require '../functions.php';
 
+// Pagination config
+$recordsPerPage = 1;
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$offset = ($page - 1) * $recordsPerPage;
+$totalPages = 1;
+
+// Fetch stored filter
+$idFilter = $_SESSION["filter"] ?? "";
+
+// Reset pagination on filter
+if (isset($_POST["filter"])) {
+	$patientId = $_GET['patientId'] ?? null;
+	$_SESSION["filter"] = $_POST["filter"];
+	header("Location: records.php" . (isset($_GET['patientId']) ? "?patientId=$patientId" : ""));
+	exit();
+}
+
+// Get patient details
 if (!empty($_GET['patientId'])) {
 	$patientId = mysqli_real_escape_string($con, $_GET['patientId']);
 	$query = "SELECT * FROM patient WHERE CONCAT('P', LPAD(id, 3, '0')) = '$patientId'";
@@ -140,6 +158,17 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 						<div class="card-body">
 							<div class="card-title">Medical Records</div>
 
+							<!-- Filter -->
+							<form method="POST" action="" class="mb-4">
+								<div class="form-group">
+									<label class="sr-only" for="filter">Filter</label>
+									<div class="input-group">
+										<input type="text" class="form-control shadow-none" id="filter" name="filter" placeholder="Filter by ID" value="<?= $idFilter; ?>">
+										<div class="input-group-append"><button class="btn btn-primary" type="submit">Filter</button></div>
+									</div>
+								</div>
+							</form>
+
 							<table class="table table-bordered table-hover">
 								<thead class="bg-light">
 									<tr>
@@ -152,10 +181,29 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 								</thead>
 								<tbody>
 									<?php
-										if (isset($patientId) && $result = mysqli_query($con, "SELECT records.*, doctor.doctorName AS providerName FROM records JOIN doctor ON records.doctor_id = doctor.id WHERE CONCAT('P', LPAD(patient_id, 3, '0')) = 'P001';")) {
+									if (isset($patientId)) {
+										// Begin base sql
+										$sql = "SELECT records.*, doctor.doctorName AS providerName FROM records JOIN doctor ON records.doctor_id = doctor.id WHERE CONCAT('P', LPAD(patient_id, 3, '0')) = '$patientId'";
+
+										// Add ID filter
+										if (!empty($idFilter)) $sql .= " AND CONCAT('R', LPAD(record_id, 3, '0')) = '$idFilter'";
+
+										// Add pagination
+										$sql .= " LIMIT $recordsPerPage OFFSET $offset;";
+
+										if ($result = mysqli_query($con, $sql)) {
 											if (mysqli_num_rows($result) > 0) {
+												// Rendering logic
 												while ($row = mysqli_fetch_assoc($result)) {
+													// Fetch the total number of records for pagination
+													$totalRecordsSql = "SELECT COUNT(*) as total FROM records WHERE CONCAT('P', LPAD(patient_id, 3, '0')) = '$patientId'";
+													if (!empty($idFilter)) $totalRecordsSql .= " AND CONCAT('R', LPAD(record_id, 3, '0')) = '$idFilter'";
+													$totalRecordsResult = $con->query($totalRecordsSql);
+													$totalRecords = $totalRecordsResult->fetch_assoc()['total'];
+													$totalPages = ceil($totalRecords / $recordsPerPage);
+
 													extract($row);
+
 													// Format data
 													$formattedRecordId = sprintf('R%03d', $record_id);
 													$formattedDate = date('j F Y', strtotime($created_at));
@@ -170,14 +218,34 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 												if (isset($_SESSION['errprompt']))
 													echo "<tr><td colspan='6'><h5 class='text-muted mt-3'><b>No Results Found</b></h5><p class='text-muted'>Enter a valid patient ID</p></td></tr>";
 												else
-													echo "<tr><td colspan='6'><h5 class='text-muted mt-3'><b>No Results Found</b></h5><p class='text-muted'>No medical records yet</p></td></tr>";
+													echo "<tr><td colspan='6'><h5 class='text-muted mt-3'><b>No Results Found</b></h5><p class='text-muted'>No matched record yet</p></td></tr>";
 											}
 										} else {
 											echo "<tr><td colspan='6'><h5 class='text-muted mt-3'><b>No Results Found</b></h5><p class='text-muted'>Enter a valid patient ID</p></td></tr>";
 										}
-										?>
+									} else {
+										echo "<tr><td colspan='6'><h5 class='text-muted mt-3'><b>No Results Found</b></h5><p class='text-muted'>Enter a valid patient ID</p></td></tr>";
+									}
+									?>
 								</tbody>
 							</table>
+
+							<!-- Pagination -->
+							<nav aria-label="Page navigation" class="mt-4">
+								<ul class="pagination justify-content-end">
+									<li class="page-item <?= ($page <= 1) ? 'disabled' : ''; ?>">
+										<a class="page-link" href="records.php?patientId=<?= $patientId; ?>&page=<?= $page - 1; ?>" aria-label="Previous">
+											<span aria-hidden="true">&laquo;</span>
+										</a>
+									</li>
+
+									<li class="page-item <?= ($page >= $totalPages) ? 'disabled' : ''; ?>">
+										<a class="page-link" href="records.php?patientId=<?= $patientId; ?>&page=<?= $page + 1; ?>" aria-label="Next">
+											<span aria-hidden="true">&raquo;</span>
+										</a>
+									</li>
+								</ul>
+							</nav>
 						</div>
 					</div>
 				</div>
@@ -201,5 +269,6 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 
 unset($_SESSION['prompt']);
 unset($_SESSION['errprompt']);
+unset($_SESSION['filter']);
 mysqli_close($con);
 ?>
