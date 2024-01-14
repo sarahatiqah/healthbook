@@ -343,7 +343,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `addendums`
 --
 ALTER TABLE `addendums`
-  MODIFY `addId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `addId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -355,7 +355,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `appId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `appId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `dependent`
@@ -385,13 +385,13 @@ ALTER TABLE `health_metrics`
 -- AUTO_INCREMENT for table `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `records`
 --
 ALTER TABLE `records`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reviews`
