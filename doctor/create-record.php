@@ -211,7 +211,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                                     </div>
                                 </div>
 
-                                <div class="pt-3 text-right"><button class="btn btn-primary" type="submit" name="save">Submit</button></div>
+                                <div class="pt-3 d-flex justify-content-between"><a class="btn btn-light" href="records.php?patientId=<?= $patientId ?>">Cancel</a><button class="btn btn-primary" type="submit" name="save">Submit</button></div>
                             </form>
                         </div>
                     </div>

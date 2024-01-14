@@ -166,6 +166,10 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                               $datenow = date("Y-m-d");
                               $currentime = date('H:i:s');
 
+                              // Format IDs
+													    $formattedPatientId = sprintf('P%03d', $patientId);
+													    $formattedAppId = sprintf('A%03d', $appId);
+
                               // Format the time in 12-hour format
                               $formattedTime = date('h:i A', strtotime($appTime));
 
@@ -185,7 +189,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                               } elseif ($status == 'approved') {
                                 $statusBadge = '<span class="badge badge-dark"><i class="fa fa-check"></i> APPROVED</span>';
                                 $rebookButton = $recordButton = $approveButton = $editButton = $deleteButton = '';
-                                $recordButton = "<a href='record-patient.php?id={$appId}' class='btn btn-secondary'><i class='fa fa-user-md'></i> Add Record</a> ";
+                                $recordButton = "<a href='create-record.php?patientId=$formattedPatientId&appointmentId=$formattedAppId' class='btn btn-secondary'><i class='fa fa-user-md'></i> Add Record</a> ";
                               } else {
                                 $statusBadge = '<span class="badge badge-success"><i class="fa fa-check"></i> DONE</span>';
                                 $rebookButton = "<a href='rebook-appointment.php?id={$appId}&did={$doctorID}' class='btn btn-primary'><i class='zmdi zmdi-archive'></i> Rebook </a> ";
