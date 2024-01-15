@@ -25,6 +25,23 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
     $queryStaff = "SELECT staffEmail FROM staff WHERE staffEmail = '$doctorEmail'";
     $resultStaff = mysqli_query($con, $queryStaff);
 
+    if ($_POST['specialization'] == 'other' && !empty($_POST['other_specialization'])) {
+      $newSpecialization = clean($_POST['other_specialization']);
+      $specCheckQuery = "SELECT id_specialization FROM specialization WHERE name_specialization = '$newSpecialization'";
+      $specCheckResult = mysqli_query($con, $specCheckQuery);
+    
+      if (mysqli_num_rows($specCheckResult) == 0) {
+          $insertSpecQuery = "INSERT INTO specialization (name_specialization) VALUES ('$newSpecialization')";
+          mysqli_query($con, $insertSpecQuery);
+          $specialization = mysqli_insert_id($con);
+      } else {
+          $specRow = mysqli_fetch_assoc($specCheckResult);
+          $specialization = $specRow['id_specialization'];
+      }
+  } else {
+      $specialization = clean($_POST['specialization']);
+  }
+
     if (mysqli_num_rows($resultEmail) == 0 && mysqli_num_rows($resultPatient) == 0 && mysqli_num_rows($resultStaff) == 0) {
 
       $queryDoctorId = "SELECT doctorId FROM doctor WHERE doctorId = '$doctorId'";
@@ -53,9 +70,6 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
       $_SESSION['errprompt'] = "Email already exists.";
     }
   }
-
-
-
 
   if (isset($_GET['delete_id'])) {
     $delete_id = clean($_GET['delete_id']);
@@ -137,7 +151,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                     </div>
                     <div class="form-group">
                       <label for="input-3">Doctor Specialization</label>
-                      <select class="form-control" name="specialization" required>
+                      <select class="form-control" name="specialization" id="specialization" required>
                         <option value="" selected disabled>Select Specialization</option>
 
                         <?php
@@ -150,9 +164,14 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                           echo '<option value="' . $id_specialization . '">' . $name_specialization . '</option>';
                         }
                         ?>
-
+                        <option value="other">Other</option>
                       </select>
                     </div>
+                    <div class="form-group" style="display:none;" id="other_spec_wrapper">
+                      <label for="other_specialization">New Specialization</label>
+                      <input type="text" class="form-control" name="other_specialization" id="other_specialization" placeholder="Enter new specialization">
+                    </div>
+
                     <div class="form-group">
                       <label for="input-4">Password</label>
                       <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
@@ -240,10 +259,21 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
         function confirmDelete() {
           return confirm("Are you sure you want to delete this doctor?");
         }
+
+        document.getElementById('specialization').addEventListener('change', function() {
+          var specInputWrapper = document.getElementById('other_spec_wrapper');
+          var specInput = document.getElementById('other_specialization');
+          
+          if (this.value == 'other') {
+            specInputWrapper.style.display = 'block';
+            specInput.required = true;
+          } else {
+            specInputWrapper.style.display = 'none';
+            specInput.required = false;
+          }
+        });
       </script>
-
   </body>
-
   </html>
 <?php
 

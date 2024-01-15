@@ -56,6 +56,27 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
       exit;
     }
 
+    if ($_POST['specialization'] == 'other' && !empty($_POST['other_specialization'])) {
+      $newSpecialization = clean($_POST['other_specialization']);
+      $specCheckQuery = "SELECT * FROM specialization WHERE name_specialization = '$newSpecialization'";
+      $specCheckResult = mysqli_query($con, $specCheckQuery);
+      if (mysqli_num_rows($specCheckResult) == 0) {
+        $insertSpecQuery = "INSERT INTO specialization (name_specialization) VALUES ('$newSpecialization')";
+        if (mysqli_query($con, $insertSpecQuery)) {
+          $specialization = mysqli_insert_id($con);
+        } else {
+          $_SESSION['errprompt'] = "Error adding new specialization: " . mysqli_error($con);
+          header("location:profile.php");
+          exit;
+        }
+      } else {
+        $specRow = mysqli_fetch_assoc($specCheckResult);
+        $specialization = $specRow['id_specialization'];
+      }
+    } else {
+      $specialization = clean($_POST['specialization']);
+    }
+
     // Continue with the rest of your update logic
     $updateQuery = "UPDATE doctor SET
         doctorName = '$doctorName',
@@ -175,7 +196,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                         <div class="form-group row">
                           <label class="col-lg-3 col-form-label form-control-label">Specialization</label>
                           <div class="col-lg-9">
-                            <select class="form-control" name="specialization" required>
+                            <select class="form-control" name="specialization" id="specialization" required>
                               <option value="" selected disabled>Select Specialization</option>
 
                               <?php
@@ -191,8 +212,14 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                                 echo '<option value="' . $id_specialization . '" ' . $selected . '>' . $name_specialization . '</option>';
                               }
                               ?>
-
+                              <option value="other">Other</option>
                             </select>
+                          </div>
+                        </div>
+                        <div class="form-group row" style="display:none;" id="other_spec_wrapper">
+                          <label class="col-lg-3 col-form-label form-control-label">New Specialization</label>
+                          <div class="col-lg-9">
+                            <input class="form-control" name="other_specialization" type="text" id="other_specialization" placeholder="Enter new specialization">
                           </div>
                         </div>
 
@@ -230,7 +257,21 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
       <!--End Back To Top Button-->
 
       <?php include "footer.php"; ?>
+      <script>
+        document.getElementById('specialization').addEventListener('change', function() {
+          var specInputWrapper = document.getElementById('other_spec_wrapper');
+          var specInput = document.getElementById('other_specialization');
+          
+          if (this.value == 'other') {
+            specInputWrapper.style.display = 'flex'; // Use flex if your form is using a flexbox layout
+            specInput.required = true; // Make the input field required
+          } else {
+            specInputWrapper.style.display = 'none'; // Hide the input field
+            specInput.required = false; // Remove the required attribute when not visible
+          }
+        });
 
+      </script>
   </body>
 
   </html>

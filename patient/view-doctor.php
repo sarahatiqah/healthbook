@@ -13,6 +13,13 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
   <!DOCTYPE html>
   <html lang="en">
   <?php include "head.php"; ?>
+  <style>
+  .table-responsive td,
+  .table-responsive th {
+    white-space: normal;
+    word-wrap: break-word;
+  }
+  </style>
 
   <body class="bg-theme bg-theme9">
 

@@ -10,6 +10,13 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
   <!DOCTYPE html>
   <html lang="en">
   <?php include "head.php"; ?>
+  <style>
+  .table-responsive td,
+  .table-responsive th {
+    white-space: normal;
+    word-wrap: break-word;
+  }
+  </style>
 
   <body class="bg-theme bg-theme9">
 
@@ -112,7 +119,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                                   }
                                 }
 
-                                $viewButton = "<a href='{$rowEducational['document']}' target='_blank' class='btn btn-light'><i class='icon-eye'></i> View Document </a>";
+                                $viewButton = "<a href='{$rowEducational['document']}' target='_blank' class='btn btn-light' style='white-space: nowrap;'><i class='icon-eye'></i> View Document </a>";
                                 $timestamp = strtotime($rowEducational['date_update']);
                                 $newDateFormat = date("d/m/Y h:i A", $timestamp);
 
