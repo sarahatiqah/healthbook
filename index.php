@@ -26,16 +26,16 @@ if (isset($_POST['login'])) {
   $resultAdmins = mysqli_stmt_get_result($stmtAdmins);
 
   // Query for staff
-  $queryStaff = "SELECT * FROM staff WHERE staffId = ? AND password = ?";
+  $queryStaff = "SELECT * FROM staff WHERE (staffId = ? OR staffEmail = ?) AND password = ?";
   $stmtStaff = mysqli_prepare($con, $queryStaff);
-  mysqli_stmt_bind_param($stmtStaff, "ss", $uname, $password);
+  mysqli_stmt_bind_param($stmtStaff, "sss", $uname, $uname, $password);
   mysqli_stmt_execute($stmtStaff);
   $resultStaff = mysqli_stmt_get_result($stmtStaff);
 
   // Query for doctor
-  $queryDoctor = "SELECT * FROM doctor WHERE doctorId = ? AND password = ?";
+  $queryDoctor = "SELECT * FROM doctor WHERE (doctorId = ? OR doctorEmail = ?) AND password = ?";
   $stmtDoctor = mysqli_prepare($con, $queryDoctor);
-  mysqli_stmt_bind_param($stmtDoctor, "ss", $uname, $password);
+  mysqli_stmt_bind_param($stmtDoctor, "sss", $uname, $uname, $password);
   mysqli_stmt_execute($stmtDoctor);
   $resultDoctor = mysqli_stmt_get_result($stmtDoctor);
 
@@ -60,6 +60,7 @@ if (isset($_POST['login'])) {
     $_SESSION['id'] = $row['id'];
     $_SESSION['staffId'] = $row['staffId'];
     $_SESSION['staffName'] = $row['staffName'];
+    $_SESSION['staffEmail'] = $row['staffEmail'];
     $_SESSION['password'] = $row['password'];
     header("location: staff/dashboard.php");
     exit;
@@ -68,6 +69,7 @@ if (isset($_POST['login'])) {
     $_SESSION['id'] = $row['id'];
     $_SESSION['doctorId'] = $row['doctorId'];
     $_SESSION['doctorName'] = $row['doctorName'];
+    $_SESSION['doctorEmail'] = $row['doctorEmail'];
     $_SESSION['password'] = $row['password'];
     header("location: doctor/dashboard.php");
     exit;

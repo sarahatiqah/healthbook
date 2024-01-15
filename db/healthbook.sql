@@ -221,7 +221,10 @@ INSERT INTO `specialization` (`id_specialization`, `name_specialization`) VALUES
 (2, 'Internal Medicine'),
 (3, 'Pediatrics'),
 (4, 'Obstetrics/Gynecology'),
-(5, 'Dermatology');
+(5, 'Dermatology'),
+(6, 'Family Medicine'),
+(7, 'Orthopaedic'),
+(8, 'Opthalmology');
 
 -- --------------------------------------------------------
 
