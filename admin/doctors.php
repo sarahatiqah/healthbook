@@ -207,7 +207,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="searchId">Search by ID:</label>
-                        <input type="text" class="form-control" name="searchId" id="searchId" value="<?php echo isset($_GET['searchId']) ? htmlspecialchars($_GET['searchId']) : ''; ?>">
+                        <input type="text" class="form-control" name="searchId" placeholder="Enter Doctor ID" id="searchId" value="<?php echo isset($_GET['searchId']) ? htmlspecialchars($_GET['searchId']) : ''; ?>">
                       </div>
                     </div>
                       <div class="col-md-6">

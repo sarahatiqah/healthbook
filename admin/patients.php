@@ -69,6 +69,17 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">List of Patients</h5>
+                  <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="mb-3">
+                    <div class="form-group">
+                        <label for="searchIC">Search by IC Number:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control shadow-none" name="searchIC" placeholder="Enter IC Number" id="searchIC" value="<?php echo isset($_GET['searchIC']) ? htmlspecialchars($_GET['searchIC']) : ''; ?>">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                   <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                       <thead>
@@ -83,8 +94,12 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                         <?php
                         // $count = 1;
                         $query = "SELECT * from patient";
-
-                        if ($result = mysqli_query($con, $query)) {
+                        if (isset($_GET['searchIC']) && !empty($_GET['searchIC'])) {
+                          $searchIC = mysqli_real_escape_string($con, $_GET['searchIC']);
+                          $query .= " WHERE icPatient LIKE '%$searchIC%'";
+                        }
+                        $result = mysqli_query($con, $query);
+                        if ($result && mysqli_num_rows($result) > 0) {
                           while ($row = mysqli_fetch_assoc($result)) {
                             extract($row);
                         ?>
@@ -101,7 +116,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                             // $count++;
                           }
                         } else {
-                          die("Error with the query in the database");
+                          echo "<tr><td colspan='3' style='text-align: center; color: red;'>No records found</td></tr>";
                         }
                         ?>
                       </tbody>

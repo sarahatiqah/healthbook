@@ -55,7 +55,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="searchName">Search by Name:</label>
-                          <input type="text" class="form-control" name="searchName" id="searchName" value="<?php echo isset($_GET['searchName']) ? htmlspecialchars($_GET['searchName']) : ''; ?>">
+                          <input type="text" class="form-control" name="searchName" id="searchName" placeholder="Enter Name" value="<?php echo isset($_GET['searchName']) ? htmlspecialchars($_GET['searchName']) : ''; ?>">
                         </div>
                       </div>
                       <div class="col-md-6">

@@ -169,7 +169,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                     <div class="form-group">
                       <label for="searchId">Search by ID:</label>
                       <div class="input-group">
-                        <input type="text" class="form-control shadow-none" name="searchId" id="searchId" value="<?php echo isset($_GET['searchId']) ? htmlspecialchars($_GET['searchId']) : ''; ?>">
+                        <input type="text" class="form-control shadow-none" name="searchId" placeholder="Enter Staff ID" id="searchId" value="<?php echo isset($_GET['searchId']) ? htmlspecialchars($_GET['searchId']) : ''; ?>">
                         <div class="input-group-append">
                           <button class="btn btn-primary" type="submit">Search</button>
                         </div>
