@@ -90,7 +90,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
           }
           ?>
           <div class="row mt-3">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
                   <div class="card-title">Add Dependent</div>
@@ -114,7 +114,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
               </div>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">List of Dependents</h5>

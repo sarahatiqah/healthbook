@@ -7,6 +7,14 @@ require '../functions.php';
 
 if (isset($_SESSION['id'], $_SESSION['password'])) {
 
+  // Add logic to handle the "approved" filter
+  $filterApproved = isset($_GET['filter']) && $_GET['filter'] == 'approved';
+  
+  // Get current date and time for filtering
+  $currentDateTime = new DateTime();
+  $currentDate = $currentDateTime->format("Y-m-d");
+  $currentTime = $currentDateTime->format("H:i:s");
+
   if (isset($_GET['app_id'])) {
     $app_id = clean($_GET['app_id']);
     $status = 'done';
@@ -105,8 +113,14 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
                         JOIN patient b ON a.patientID = b.id 
                         JOIN doctor c ON a.doctorID = c.id 
                         LEFT JOIN dependent d ON a.dependentID = d.id_dependent
-                        WHERE a.patientID='" . $_SESSION['id'] . "' 
-                        ORDER BY a.appDate DESC, a.appTime";
+                        WHERE a.patientID='" . $_SESSION['id'] . "'";
+                        
+                        if ($filterApproved) {
+                          $query .= " AND a.status='approved' AND (a.appDate > '$currentDate' OR (a.appDate = '$currentDate' AND a.appTime > '$currentTime'))";
+                          $query .= " ORDER BY a.appDate ASC, a.appTime ASC"; // Ascending order for approved upcoming appointments
+                      } else {
+                          $query .= " ORDER BY a.appDate DESC, a.appTime"; // Descending order for all appointments
+                      }
 
 
                         $result = mysqli_query($con, $query);

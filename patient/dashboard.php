@@ -85,7 +85,7 @@ if (isset($_SESSION['id'], $_SESSION['password'])) {
 						<!-- Modal Body -->
 						<div class="modal-body">
 							<p style="color: black;">You have <span style="color: red;"><?php echo $upcomingAppointmentCount ?></span> new upcoming appointment to be attend.
-								<a href="appointment.php" style="color: blue;">Click here for more details</a>
+								<a href="appointment.php?filter=approved" style="color: blue;">Click here for more details</a>
 							</p>
 						</div>
 
