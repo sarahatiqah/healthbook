@@ -12,7 +12,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
   if (isset($_POST['save'])) {
     $appID = clean($_POST['id']);
-    $targetDirectory = "../patient/receipt/";  // Change this to your desired directory
+    $targetDirectory = "../uploads/receipts/";
     $targetFile = $targetDirectory . basename($_FILES["receipt"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
@@ -52,7 +52,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
         if (mysqli_stmt_execute($updateStmt)) {
           $_SESSION['prompt'] = "Receipt upload successfully.";
-          header("location:appointment.php");
+          header("location:appointment-list.php");
           exit;
         } else {
           $_SESSION['errprompt'] = "Error updating receipt: " . mysqli_error($con);
@@ -106,7 +106,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
           JOIN patient b 
           JOIN records d
           LEFT JOIN dependent c ON a.dependentID = c.id_dependent
-          WHERE a.appId=$idapp AND a.patientID=b.id AND d.appId=$idapp";
+          WHERE a.appId=$idapp AND a.patientID=b.id AND d.app_id=$idapp";
 
           if ($result = mysqli_query($con, $query)) {
             $row = mysqli_fetch_assoc($result);
@@ -153,7 +153,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                       </div>
                       <div class="form-group">
                         <label for="input-1">Clarification</label>
-                        <input type="text" class="form-control" value="<?php echo $clarification ?>" disabled>
+                        <input type="text" class="form-control" value="<?php echo $note_clarification ?>" disabled>
                       </div>
                       <div class="form-group">
                         <label for="input-1">Clinical Progress</label>
@@ -178,10 +178,9 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                         <input type="file" class="form-control" name="receipt" required>
                       </div>
 
-                      <div class="form-group">
-                        <a href="appointment.php" class="btn btn-secondary px-3">Cancel</a>
-                        <input type="submit" class="btn btn-primary px-4" name="save" value="Upload">
-                      </div>
+                      <div class="pt-3 d-flex justify-content-between">
+                        <a class="btn btn-light" href="appointment-list.php">Cancel</a>
+                        <button class="btn btn-primary" type="submit" name="save">Upload</button></div>
                     </form>
                   </div>
                 </div>
