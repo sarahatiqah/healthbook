@@ -25,4 +25,6 @@
     <link href="../assets/plugins/fullcalendar/css/fullcalendar.min.css" rel='stylesheet' />
     <!-- Add this in the head section of your HTML -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/tagify.css">
+    <!-- Data Tables Css -->
+    <link rel="stylesheet" href="../assets/plugins/DataTables/datatables.css" />
 </head>

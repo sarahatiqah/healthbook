@@ -23,4 +23,6 @@
     <link href="../assets/css/sidebar-menu.css" rel="stylesheet" />
     <!--Full Calendar Css-->
     <link href="../assets/plugins/fullcalendar/css/fullcalendar.min.css" rel='stylesheet' />
+    <!-- Data Tables Css -->
+    <link rel="stylesheet" href="../assets/plugins/DataTables/datatables.css" />
 </head>

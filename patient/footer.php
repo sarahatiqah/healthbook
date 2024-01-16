@@ -14,3 +14,5 @@
 <!-- Full Calendar -->
 <script src='../assets/plugins/fullcalendar/js/moment.min.js'></script>
 <script src='../assets/plugins/fullcalendar/js/fullcalendar.min.js'></script>
+<!-- Data Tables -->
+<script src="../assets/plugins/DataTables/datatables.js"></script>

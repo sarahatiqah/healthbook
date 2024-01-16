@@ -14,3 +14,5 @@
 <script src='../assets/plugins/fullcalendar/js/fullcalendar.min.js'></script>
 <!-- tagify js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/tagify.min.js"></script>
+<!-- Data Tables -->
+<script src="../assets/plugins/DataTables/datatables.js"></script>
