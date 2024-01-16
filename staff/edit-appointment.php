@@ -38,7 +38,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
     if (mysqli_num_rows($checkResult) > 0) {
       $_SESSION['errprompt'] = "Appointment with the selected date, time, and doctor already exists.";
       //   header("location:new-appointment-list.php");
-      header("location:edit-appointment-list.php?id=" . urlencode($id) . "&did=" . urlencode($doctorID) . "&appDate=" . urlencode($appDate));
+      header("location:edit-appointment.php?id=" . urlencode($id) . "&did=" . urlencode($doctorID) . "&appDate=" . urlencode($appDate));
       exit;
     }
 
@@ -93,7 +93,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
       exit;
     } else {
       $_SESSION['errprompt'] = "Error updating appointment information: " . mysqli_error($con);
-      header("location:edit-appointment-list.php?id=" . $id . "did" . $did);
+      header("location:edit-appointment.php?id=" . $id . "did" . $did);
       exit;
     }
   }
@@ -264,7 +264,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
           var selectedDate = document.getElementById('appDate').value;
 
           // Redirect to the same page with the selected date as a query parameter
-          window.location.href = 'edit-appointment-list.php?id=' + <?php echo $idapp; ?> + '&did=' + <?php echo $did; ?> + '&appDate=' + selectedDate;
+          window.location.href = 'edit-appointment.php?id=' + <?php echo $idapp; ?> + '&did=' + <?php echo $did; ?> + '&appDate=' + selectedDate;
         }
       </script>
       <script>

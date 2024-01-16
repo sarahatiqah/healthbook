@@ -4,16 +4,6 @@ session_start();
 require '../dbconnection.php';
 require '../functions.php';
 
-// Pagination config
-$recordsPerPage = 10;
-$page = $_GET['page'] ?? 1;
-$offset = ($page - 1) * $recordsPerPage;
-$totalRecords = 0;
-$totalPages = 1;
-
-// Fetch filter value
-$idFilter = $_GET["filter"] ?? "";
-
 // Import PHPMailer into global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -123,24 +113,32 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 							}
 							?>
 
-							<!-- Filter -->
-							<form method="GET" action="" class="mb-4">
-								<div class="form-group">
-									<label for="filter">Status</label>
-									<div class="input-group">
-										<select class="custom-select shadow-none" id="filter" name="filter">
-											<option value="" <?= $idFilter == "" ? "selected" : "" ?>>All</option>
-											<option value="pending" <?= $idFilter == "pending" ? "selected" : "" ?>>Pending</option>
-											<option value="approved" <?= $idFilter == "approved" ? "selected" : "" ?>>Approved</option>
-											<option value="done" <?= $idFilter == "done" ? "selected" : "" ?>>Done</option>
-										</select>
-										<div class="input-group-append"><button class="btn btn-primary" type="submit">Filter</button></div>
-									</div>
+							<div class="d-flex flex-row justify-content-between mb-2 mt-4">
+								<!-- Selection -->
+								<div class="d-flex flex-row align-items-center">
+									Show
+									<select class="custom-select custom-select-sm shadow-none mx-2" style="appearance: auto;" id="pageLength">
+										<option>10</option>
+										<option>25</option>
+										<option>50</option>
+										<option>100</option>
+									</select>
+									entries
 								</div>
-							</form>
+
+								<div class="d-flex flex-row align-items-center" style="width: 10rem;">
+									<label for="filter" class="mb-0 mr-2">Status</label>
+									<select class="custom-select custom-select-sm shadow-none" style="appearance: auto;" id="filter" name="filter">
+										<option value="">All</option>
+										<option value="pending">Pending</option>
+										<option value="approved">Approved</option>
+										<option value="done">Done</option>
+									</select>
+								</div>
+							</div>
 
 							<div class="table-responsive">
-								<table class="table table-bordered table-hover table-sm">
+								<table id="appTable" class="table table-bordered table-hover table-sm">
 									<thead class="bg-light">
 										<tr>
 											<th scope="col">ID</th>
@@ -160,16 +158,8 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 												FROM appointment a 
 												JOIN patient b ON a.patientID = b.id 
 												JOIN doctor c ON a.doctorID = c.id 
-												LEFT JOIN dependent d ON a.dependentID = d.id_dependent";
-
-										// Add status filter
-										if (!empty($idFilter)) $sql .= " WHERE status = '$idFilter'";
-
-										// Sort by timestamp
-										$sql .= " ORDER BY a.appDate DESC, a.appTime";
-
-										// Add pagination
-										$sql .= " LIMIT $recordsPerPage OFFSET $offset";
+												LEFT JOIN dependent d ON a.dependentID = d.id_dependent
+												ORDER BY a.appDate DESC, a.appTime";
 
 										// No errors with SQL
 										if ($result = mysqli_query($con, $sql)) {
@@ -181,13 +171,6 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
 											// Has appointment
 											if (mysqli_num_rows($result) > 0) {
-												// Fetch the total number of records for pagination
-												$totalRecordsSql = "SELECT COUNT(*) as total FROM appointment";
-												if (!empty($idFilter)) $totalRecordsSql .= " WHERE status = '$idFilter'";
-												$totalRecordsResult = $con->query($totalRecordsSql);
-												$totalRecords = $totalRecordsResult->fetch_assoc()['total'];
-												$totalPages = ceil($totalRecords / $recordsPerPage);
-
 												while ($row = mysqli_fetch_assoc($result)) {
 													extract($row);
 
@@ -217,7 +200,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 																									// Approve Button
 																									echo "<a href='appointment-list.php?app_id={$appId}&patientEmail={$patientEmail}&appDate={$formattedDateEmail}&appTime={$formattedTime}&doctorName={$doctorName}' class='btn btn-success mr-2' onclick='return confirm(`Are you sure you want to approve this appointment?`);'><i class='fa fa-check-circle'></i></a>";
 																									// Update Button
-																									echo "<a href='edit-appointment-list.php?id={$appId}&did={$doctorID}&appDate={$appDate}' class='btn btn-warning mr-2'><i class='fa fa-pencil'></i></a>";
+																									echo "<a href='edit-appointment.php?id={$appId}&did={$doctorID}&appDate={$appDate}' class='btn btn-warning mr-2'><i class='fa fa-pencil'></i></a>";
 																								}
 																								?><a href="appointment-list.php?delete_id=<?= $appId ?>" class='btn btn-danger' onclick='return confirm("Are you sure you want to delete this appointment?");'><i class='fa fa-trash'></i></a>
 															</td style="vertical-align: middle;">
@@ -248,42 +231,36 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 															</td>
 															<td style="vertical-align: middle;"><a href='upload-receipt.php?id=<?= $appId ?>' class='btn btn-primary'><i class='fa fa-upload'></i></a></td>
 														</tr>
-												<?php }
+										<?php }
 														}
 													}
-													// No appointments
-													else { ?>
-												<tr>
-													<td colspan='9'>
-														<h5 class='text-muted mt-3'><b>No Results Found</b></h5>
-														<p class='text-muted'>Try again another time</p>
-													</td>
-												</tr><?php
-													}
 												}
-														?>
+										?>
 									</tbody>
 								</table>
 							</div>
 
 							<!-- Pagination -->
 							<nav aria-label="Page navigation" class="mt-4 d-flex flex-row justify-content-between align-items-center">
+								<!-- Information -->
 								<span>
-									Showing <?= min($totalRecords, ($page - 1) * $recordsPerPage + 1); ?>
-									to <?= min($totalRecords, $page * $recordsPerPage); ?>
-									of <?= $totalRecords; ?> results
+									Showing <span id="numRecords">0</span>
+									to <span id="totalRecords">0</span>
+									of <span id="allRecords">0</span> results
 								</span>
+
+								<!-- Navigation -->
 								<ul class="pagination mb-0">
-									<li class="page-item <?= ($page <= 1) ? 'disabled' : ''; ?>">
-										<a class="page-link" href="appointment-list.php?page=<?= $page - 1; ?><?= $idFilter ? "&filter=$idFilter" : "" ?>" aria-label="Previous">
+									<li class="page-item">
+										<button class="page-link" aria-label="Previous" id='previousButton'>
 											<span aria-hidden="true">&laquo;</span>
-										</a>
+										</button>
 									</li>
 
-									<li class="page-item <?= ($page >= $totalPages) ? 'disabled' : ''; ?>">
-										<a class="page-link" href="appointment-list.php?&page=<?= $page + 1; ?><?= $idFilter ? "&filter=$idFilter" : "" ?>" aria-label="Next">
+									<li class="page-item">
+										<button class="page-link" aria-label="Next" id="nextButton">
 											<span aria-hidden="true">&raquo;</span>
-										</a>
+										</button>
 									</li>
 								</ul>
 							</nav>
@@ -300,6 +277,50 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 		<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
 
 		<?php include "footer.php"; ?>
+
+		<script>
+			$(document).ready(function() {
+				let table = $('#appTable').DataTable({
+					"dom": 'rt',
+					"order": [],
+					columnDefs: [{
+						orderable: false,
+						targets: [7, 8]
+					}],
+				});
+				let info = table.page.info();
+
+				// Update information on page change
+				table.on('draw', function() {
+					var pageInfo = table.page.info();
+					$('#numRecords').text(pageInfo.start + 1);
+					$('#totalRecords').text(pageInfo.end);
+					$('#allRecords').text(pageInfo.recordsDisplay);
+					$('#previousButton').prop('disabled', pageInfo.page === 0);
+					$('#nextButton').prop('disabled', pageInfo.page === pageInfo.pages - 1);
+				});
+
+				$('#nextButton').on('click', function() {
+					table.page('next').draw('page');
+				});
+
+				$('#previousButton').on('click', function() {
+					table.page('previous').draw('page');
+				});
+
+				$('#filter').on('change', function() {
+					let status = $(this).val();
+					table.column(6).search(status).draw();
+				});
+
+				$('#pageLength').on('change', function() {
+					var pageLength = $(this).val();
+					table.page.len(pageLength).draw();
+				});
+
+				table.draw();
+			});
+		</script>
 	</body>
 
 	</html>

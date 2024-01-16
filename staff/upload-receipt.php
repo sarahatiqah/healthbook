@@ -12,7 +12,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
   if (isset($_POST['save'])) {
     $appID = clean($_POST['id']);
-    $targetDirectory = "../patient/receipt/";  // Change this to your desired directory
+    $targetDirectory = "../uploads/receipts/";
     $targetFile = $targetDirectory . basename($_FILES["receipt"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
