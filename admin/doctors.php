@@ -204,12 +204,12 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                   <h5 class="card-title">List of Doctors</h5>
                   <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="mb-3">
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="searchName">Search by Name:</label>
-                          <input type="text" class="form-control" name="searchName" id="searchName" value="<?php echo isset($_GET['searchName']) ? htmlspecialchars($_GET['searchName']) : ''; ?>">
-                        </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="searchId">Search by ID:</label>
+                        <input type="text" class="form-control" name="searchId" id="searchId" value="<?php echo isset($_GET['searchId']) ? htmlspecialchars($_GET['searchId']) : ''; ?>">
                       </div>
+                    </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="filterSpecialization">Filter by Specialization:</label>
@@ -247,18 +247,23 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                         <?php
                         // $count = 1;
                         $query = "SELECT a.*, b.name_specialization FROM doctor a JOIN specialization b ON a.specialization = b.id_specialization";
-                        if (!empty($_GET['searchName'])) {
-                          $searchName = mysqli_real_escape_string($con, $_GET['searchName']);
-                          $query .= " WHERE a.doctorName LIKE '%$searchName%'";
+                        $whereConditions = [];
+
+                        if (!empty($_GET['searchId'])) {
+                          $searchId = mysqli_real_escape_string($con, $_GET['searchId']);
+                          $whereConditions[] = "a.doctorId LIKE '%$searchId%'";
                         }
 
-                        // Apply specialization filter
                         if (!empty($_GET['filterSpecialization'])) {
                           $filterSpecialization = mysqli_real_escape_string($con, $_GET['filterSpecialization']);
-                          $query .= (strpos($query, 'WHERE') === false ? " WHERE" : " AND") . " a.specialization = '$filterSpecialization'";
+                          $whereConditions[] = "a.specialization = '$filterSpecialization'";
                         }
 
-                        $query .= " ORDER BY a.doctorName ASC"; // Or any other order you prefer
+                        if (!empty($whereConditions)) {
+                          $query .= " WHERE " . implode(' AND ', $whereConditions);
+                        }
+
+                        $query .= " ORDER BY a.doctorId ASC";
 
                         $result = mysqli_query($con, $query);
 
