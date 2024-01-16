@@ -106,7 +106,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
           JOIN patient b 
           JOIN records d
           LEFT JOIN dependent c ON a.dependentID = c.id_dependent
-          WHERE a.appId=$idapp AND a.patientID=b.id AND d.appId=$idapp";
+          WHERE a.appId=$idapp AND a.patientID=b.id AND d.app_id=$idapp";
 
           if ($result = mysqli_query($con, $query)) {
             $row = mysqli_fetch_assoc($result);
