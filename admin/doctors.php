@@ -126,68 +126,112 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
             showPrompt();
           }
           ?>
-          <div class="row mt-3">
-            <div class="col-lg-4">
-              <div class="card">
-                <div class="card-body">
-                  <div class="card-title">Add Doctor</div>
-                  <hr>
-                  <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data">
-                    <div class="form-group">
-                      <label for="input-1">Doctor ID</label>
-                      <input type="text" name="doctorId" class="form-control" placeholder="Enter Doctor ID" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="input-1">Doctor Name</label>
-                      <input type="text" name="doctorName" class="form-control" placeholder="Enter Doctor Name" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="input-2">Doctor Email</label>
-                      <input type="email" name="doctorEmail" class="form-control" placeholder="Enter Doctor Email Address" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="input-3">Doctor Mobile</label>
-                      <input type="number" name="doctorPhone" class="form-control" placeholder="Enter Doctor Mobile Number" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="input-3">Doctor Specialization</label>
-                      <select class="form-control" name="specialization" id="specialization" required>
-                        <option value="" selected disabled>Select Specialization</option>
+          
+            <!-- Add Doctor Modal Trigger Button -->
+            <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#addDoctorModal">
+              Add Doctor
+            </button>
 
-                        <?php
-                        $query = "SELECT * FROM specialization";
-                        $result = mysqli_query($con, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                          $id_specialization = $row['id_specialization'];
-                          $name_specialization = $row['name_specialization'];
+            <!-- Add Doctor Modal -->
+            <div class="modal fade" id="addDoctorModal" tabindex="-1" role="dialog" aria-labelledby="addDoctorModalLabel" aria-hidden="true" data-backdrop="static">
+              <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content" style="background-image: linear-gradient(45deg, #29323c, #485563); color: #b8c7ce;">
+                  <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
+                    <h5 class="modal-title" id="addDoctorModalLabel">Add Doctor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+                    <div class="modal-body">
+                      <div class="form-group">
+                                  <label for="input-1">Doctor ID</label>
+                                  <input type="text" name="doctorId" class="form-control" placeholder="Enter Doctor ID" required>
+                                </div>
+                                <div class="form-group">
+                                  <label for="input-1">Doctor Name</label>
+                                  <input type="text" name="doctorName" class="form-control" placeholder="Enter Doctor Name" required>
+                                </div>
+                                <div class="form-group">
+                                  <label for="input-2">Doctor Email</label>
+                                  <input type="email" name="doctorEmail" class="form-control" placeholder="Enter Doctor Email Address" required>
+                                </div>
+                                <div class="form-group">
+                                  <label for="input-3">Doctor Mobile</label>
+                                  <input type="number" name="doctorPhone" class="form-control" placeholder="Enter Doctor Mobile Number" required>
+                                </div>
+                                <div class="form-group">
+                                  <label for="input-3">Doctor Specialization</label>
+                                  <select class="form-control" name="specialization" id="specialization" required>
+                                    <option value="" selected disabled>Select Specialization</option>
 
-                          echo '<option value="' . $id_specialization . '">' . $name_specialization . '</option>';
-                        }
-                        ?>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                    <div class="form-group" style="display:none;" id="other_spec_wrapper">
-                      <label for="other_specialization">New Specialization</label>
-                      <input type="text" class="form-control" name="other_specialization" id="other_specialization" placeholder="Enter new specialization">
-                    </div>
+                                    <?php
+                                    $query = "SELECT * FROM specialization";
+                                    $result = mysqli_query($con, $query);
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                      $id_specialization = $row['id_specialization'];
+                                      $name_specialization = $row['name_specialization'];
 
-                    <div class="form-group">
-                      <label for="input-4">Password</label>
-                      <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
+                                      echo '<option value="' . $id_specialization . '">' . $name_specialization . '</option>';
+                                    }
+                                    ?>
+                                    <option value="other">Other</option>
+                                  </select>
+                                </div>
+                                <div class="form-group" style="display:none;" id="other_spec_wrapper">
+                                  <label for="other_specialization">New Specialization</label>
+                                  <input type="text" class="form-control" name="other_specialization" id="other_specialization" placeholder="Enter new specialization">
+                                </div>
+
+                                <div class="form-group">
+                                  <label for="input-4">Password</label>
+                                  <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
+                                </div>
                     </div>
-                    <div class="form-group">
-                      <input type="submit" class="btn btn-primary px-5" name="register" value="Submit">
+                    <div class="modal-footer" style="border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                      <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary" name="register">Submit</button>
                     </div>
                   </form>
                 </div>
               </div>
             </div>
 
-            <div class="col-lg-8">
+            <div class="row mt-3">
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">List of Doctors</h5>
+                  <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="mb-3">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="searchName">Search by Name:</label>
+                          <input type="text" class="form-control" name="searchName" id="searchName" value="<?php echo isset($_GET['searchName']) ? htmlspecialchars($_GET['searchName']) : ''; ?>">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="filterSpecialization">Filter by Specialization:</label>
+                          <select class="form-control" name="filterSpecialization" id="filterSpecialization">
+                            <option value="">All Specializations</option>
+                            <?php
+                            // Fetch specialization options from the database
+                            $specializationQuery = "SELECT * FROM specialization";
+                            $specializationResult = mysqli_query($con, $specializationQuery);
+                            while ($specializationRow = mysqli_fetch_assoc($specializationResult)) {
+                              $specializationId = $specializationRow['id_specialization'];
+                              $specializationName = $specializationRow['name_specialization'];
+                              $selected = (isset($_GET['filterSpecialization']) && $_GET['filterSpecialization'] == $specializationId) ? 'selected' : '';
+                              echo "<option value='{$specializationId}' {$selected}>{$specializationName}</option>";
+                            }
+                            ?>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                  </form>
                   <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                       <thead>
@@ -202,10 +246,23 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                       <tbody>
                         <?php
                         // $count = 1;
-                        $query = "SELECT a.*,b.name_specialization from doctor a JOIN specialization b WHERE a.specialization=b.id_specialization
-                        ORDER by a.id ASC";
+                        $query = "SELECT a.*, b.name_specialization FROM doctor a JOIN specialization b ON a.specialization = b.id_specialization";
+                        if (!empty($_GET['searchName'])) {
+                          $searchName = mysqli_real_escape_string($con, $_GET['searchName']);
+                          $query .= " WHERE a.doctorName LIKE '%$searchName%'";
+                        }
 
-                        if ($result = mysqli_query($con, $query)) {
+                        // Apply specialization filter
+                        if (!empty($_GET['filterSpecialization'])) {
+                          $filterSpecialization = mysqli_real_escape_string($con, $_GET['filterSpecialization']);
+                          $query .= (strpos($query, 'WHERE') === false ? " WHERE" : " AND") . " a.specialization = '$filterSpecialization'";
+                        }
+
+                        $query .= " ORDER BY a.doctorName ASC"; // Or any other order you prefer
+
+                        $result = mysqli_query($con, $query);
+
+                        if ($result && mysqli_num_rows($result) > 0) {
                           while ($row = mysqli_fetch_assoc($result)) {
                             extract($row);
                         ?>
@@ -229,7 +286,7 @@ if (isset($_SESSION['adminId'], $_SESSION['password'])) {
                             // $count++;
                           }
                         } else {
-                          die("Error with the query in the database");
+                          echo "<tr><td colspan='4' style='text-align: center; color: red;'>No records found</td></tr>";
                         }
                         ?>
                       </tbody>
