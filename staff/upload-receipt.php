@@ -153,7 +153,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                       </div>
                       <div class="form-group">
                         <label for="input-1">Clarification</label>
-                        <input type="text" class="form-control" value="<?php echo $clarification ?>" disabled>
+                        <input type="text" class="form-control" value="<?php echo $note_clarification ?>" disabled>
                       </div>
                       <div class="form-group">
                         <label for="input-1">Clinical Progress</label>
@@ -178,10 +178,9 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                         <input type="file" class="form-control" name="receipt" required>
                       </div>
 
-                      <div class="form-group">
-                        <a href="appointment-list.php" class="btn btn-secondary px-3">Cancel</a>
-                        <input type="submit" class="btn btn-primary px-4" name="save" value="Upload">
-                      </div>
+                      <div class="pt-3 d-flex justify-content-between">
+                        <a class="btn btn-light" href="appointment-list.php">Cancel</a>
+                        <button class="btn btn-primary" type="submit" name="save">Upload</button></div>
                     </form>
                   </div>
                 </div>

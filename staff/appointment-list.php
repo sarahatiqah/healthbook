@@ -12,6 +12,7 @@ use PHPMailer\PHPMailer\Exception;
 require '../vendor/autoload.php';
 
 if (isset($_SESSION['staffId'], $_SESSION['password'])) {
+	// Approve appointment
 	if (isset($_GET['app_id']) && isset($_GET['patientEmail']) && isset($_GET['appDate']) && isset($_GET['appTime'])  && isset($_GET['doctorName'])) {
 		$app_id = clean($_GET['app_id']);
 		$patientEmail = clean($_GET['patientEmail']);
@@ -26,7 +27,6 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 		if (mysqli_query($con, $query)) {
 			$_SESSION['prompt'] = "Appointment has been approved and email already sent to $patientEmail.";
 
-			// Send password reset email
 			$subject = "Appointment Approved";
 			$message = "Your appointment has been approved: <br>Date: " . $appDate . "<br>Time: " . $appTime . "<br>Doctor: " . $doctorName;
 
@@ -68,7 +68,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 		exit;
 	}
 
-
+	// Delete appointment
 	if (isset($_GET['delete_id'])) {
 		$delete_id = clean($_GET['delete_id']);
 
