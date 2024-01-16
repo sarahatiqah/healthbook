@@ -16,6 +16,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
   $idapp = $_GET['id'];
   $did = isset($_GET['did']) ? $_GET['did'] : '';
 
+  $returnUrl = "appointment.php" . (isset($_GET['filter']) && $_GET['filter'] == 'pending' ? "?filter=pending" : "");
 
   if (isset($_POST['save'])) {
     $id = clean($_POST['appid']);
@@ -37,10 +38,9 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
     if (mysqli_num_rows($checkResult) > 0) {
       $_SESSION['errprompt'] = "Appointment with the selected date, time, and doctor already exists.";
-      //   header("location:new-appointment.php");
-      header("location:edit-appointment.php?id=" . urlencode($id) . "&did=" . urlencode($doctorID) . "&appDate=" . urlencode($appDate));
+      header("Location: edit-appointment.php?id=" . urlencode($id) . "&did=" . urlencode($doctorID) . "&appDate=" . urlencode($appDate) . (isset($_GET['filter']) ? "&filter=" . $_GET['filter'] : ""));
       exit;
-    }
+  }
 
     // Continue with the update logic
     $updateQuery = "UPDATE appointment SET
@@ -89,11 +89,13 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
 
 
-      header("location:appointment.php");
+      $returnUrl = isset($_POST['returnUrl']) ? $_POST['returnUrl'] : "appointment.php";
+      header("Location: $returnUrl");
       exit;
     } else {
       $_SESSION['errprompt'] = "Error updating appointment information: " . mysqli_error($con);
-      header("location:edit-appointment.php?id=" . $id . "did" . $did);
+      $returnUrl = isset($_POST['returnUrl']) ? $_POST['returnUrl'] : "appointment.php";
+      header("Location: edit-appointment.php?id=" . urlencode($id) . "&did=" . urlencode($did) . ($filterStatus ? "&filter=pending" : ""));
       exit;
     }
   }
@@ -158,7 +160,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                   <div class="card-body">
                     <div class="card-title">Edit Appointment</div>
                     <hr>
-                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" enctype="multipart/form-data">
+                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?><?php echo isset($_GET['filter']) ? '?filter=' . $_GET['filter'] : ''; ?>" method="POST" enctype="multipart/form-data">
                       <input type="hidden" name="appid" value="<?php echo $idapp ?>">
                       <input type="hidden" name="doctorID" value="<?php echo $doctorID ?>">
                       <input type="hidden" name="id_specialization" value="<?php echo $id_specialization ?>">
@@ -166,6 +168,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                       <input type="hidden" name="currentAppTime" value="<?php echo htmlspecialchars($appTime); ?>">
                       <input type="hidden" name="patientEmail" value="<?php echo $patientEmail ?>">
                       <input type="hidden" name="doctorName" value="<?php echo $doctorName ?>">
+                      <input type="hidden" name="returnUrl" value="<?php echo htmlspecialchars($returnUrl); ?>">
                       <div class="form-group">
                         <label for="input-1">Doctor Name</label>
                         <input type="text" class="form-control" value="<?php echo $doctorName ?>" disabled>
@@ -230,7 +233,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                       </div>
 
                       <div class="form-group">
-                        <a href="appointment.php" class="btn btn-secondary px-3">Cancel</a>
+                        <a href="<?php echo htmlspecialchars($returnUrl); ?>" class="btn btn-secondary px-3">Cancel</a>
                         <input type="submit" class="btn btn-primary px-4" name="save" value="Save">
                       </div>
                     </form>
@@ -263,8 +266,12 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
           // Get the selected date
           var selectedDate = document.getElementById('appDate').value;
 
-          // Redirect to the same page with the selected date as a query parameter
-          window.location.href = 'edit-appointment.php?id=' + <?php echo $idapp; ?> + '&did=' + <?php echo $did; ?> + '&appDate=' + selectedDate;
+          // Retrieve the current URL parameters
+          var currentParams = new URLSearchParams(window.location.search);
+          // Update the 'appDate' parameter with the new date
+          currentParams.set('appDate', selectedDate);
+          // Redirect to the same page with the updated query parameters
+          window.location.href = window.location.pathname + '?' + currentParams.toString();
         }
       </script>
       <script>

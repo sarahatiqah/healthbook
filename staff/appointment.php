@@ -13,6 +13,7 @@ use PHPMailer\PHPMailer\Exception;
 require '../vendor/autoload.php';
 
 if (isset($_SESSION['staffId'], $_SESSION['password'])) {
+  $filterStatus = isset($_GET['filter']) && $_GET['filter'] == 'pending';
 
   if (isset($_GET['app_id']) && isset($_GET['patientEmail']) && isset($_GET['appDate']) && isset($_GET['appTime'])  && isset($_GET['doctorName'])) {
     $app_id = clean($_GET['app_id']);
@@ -69,7 +70,9 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
     }
 
 
-    header("location: appointment.php");
+    // Redirect to the appropriate page
+    $redirectUrl = $filterStatus ? "appointment.php?filter=pending" : "appointment.php";
+    header("Location: $redirectUrl");
     exit;
   }
 
@@ -85,13 +88,20 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
       $_SESSION['errprompt'] = "Error deleting appointment.";
     }
 
-    header("location: appointment.php");
+    // Redirect to the appropriate page
+    $redirectUrl = $filterStatus ? "appointment.php?filter=pending" : "appointment.php";
+    header("Location: $redirectUrl");
     exit;
   }
 ?>
   <!DOCTYPE html>
   <html lang="en">
   <?php include "head.php"; ?>
+  <style>
+  .action-button {
+      margin-right: 4px;
+  }
+  </style>
 
   <body class="bg-theme bg-theme9">
 
@@ -149,11 +159,29 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                       <tbody>
                         <?php
                         $count = 1;
-                        $query = "SELECT a.*, b.patientName,b.patientEmail,c.doctorName,d.name_dependent FROM appointment a 
-                  JOIN patient b ON a.patientID = b.id 
-                  JOIN doctor c ON a.doctorID = c.id 
-                  LEFT JOIN dependent d ON a.dependentID = d.id_dependent
-                  ORDER BY a.appDate DESC, a.appTime";
+                        $filterStatus = isset($_GET['filter']) && $_GET['filter'] == 'pending';
+                        $currentDateTime = new DateTime();
+                        $currentDate = $currentDateTime->format("Y-m-d");
+                        $currentTime = $currentDateTime->format("H:i:s");
+
+                        if ($filterStatus) {
+                            $query = "SELECT a.*, b.patientName, b.patientEmail, c.doctorName, d.name_dependent 
+                                      FROM appointment a 
+                                      JOIN patient b ON a.patientID = b.id 
+                                      JOIN doctor c ON a.doctorID = c.id 
+                                      LEFT JOIN dependent d ON a.dependentID = d.id_dependent
+                                      WHERE a.status = 'pending' 
+                                      AND (a.appDate > '$currentDate' OR (a.appDate = '$currentDate' AND a.appTime > '$currentTime'))
+                                      ORDER BY a.appDate ASC, a.appTime ASC";
+                        } else {
+                            // Keep your existing query here for the non-filtered view
+                            $query = "SELECT a.*, b.patientName, b.patientEmail, c.doctorName, d.name_dependent 
+                                      FROM appointment a 
+                                      JOIN patient b ON a.patientID = b.id 
+                                      JOIN doctor c ON a.doctorID = c.id 
+                                      LEFT JOIN dependent d ON a.dependentID = d.id_dependent
+                                      ORDER BY a.appDate DESC, a.appTime";
+                        }
 
                         $result = mysqli_query($con, $query);
 
@@ -180,9 +208,9 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
                               if ($status == 'pending') {
                                 $statusBadge = '<span class="badge badge-primary"><i class="fa fa-spinner"></i> PENDING</span>';
-                                $approveButton = "<a href='appointment.php?app_id={$appId}&patientEmail={$patientEmail}&appDate={$formattedDateEmail}&appTime={$formattedTime}&doctorName={$doctorName}' class='btn btn-success' onclick='return confirmApprove();'><i class='icon-check'></i> Approve</a> ";
-                                $editButton = "<a href='edit-appointment.php?id={$appId}&did={$doctorID}&appDate={$appDate}' class='btn btn-warning'><i class='icon-pencil'></i> </a> ";
-                                $deleteButton = "<a href='appointment.php?delete_id={$appId}' class='btn btn-danger' onclick='return confirmDelete();'><i class='icon-trash'></i> </a>";
+                                $approveButton = "<a href='appointment.php?app_id={$appId}&patientEmail={$patientEmail}&appDate={$formattedDateEmail}&appTime={$formattedTime}&doctorName={$doctorName}&filter=" . ($filterStatus ? "pending" : "all") . "' class='btn btn-success' onclick='return confirmApprove();'><i class='icon-check'></i> Approve</a> ";
+                                $editButton = "<a href='edit-appointment.php?id={$appId}&appDate={$appDate}&did={$doctorID}&filter=" . ($filterStatus ? "pending" : "all") . "' class='btn btn-warning action-button'><i class='icon-pencil'></i> </a>";
+                                $deleteButton = "<a href='appointment.php?delete_id={$appId}&filter=" . ($filterStatus ? "pending" : "all") . "' class='btn btn-danger action-button' onclick='return confirmDelete();'><i class='icon-trash'></i> </a>";
                                 $receiptButton = '';
                               } elseif ($status == 'approved') {
                                 $statusBadge = '<span class="badge badge-dark"><i class="fa fa-check"></i> APPROVED</span>';
