@@ -52,7 +52,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 
         if (mysqli_stmt_execute($updateStmt)) {
           $_SESSION['prompt'] = "Receipt upload successfully.";
-          header("location:appointment.php");
+          header("location:appointment-list.php");
           exit;
         } else {
           $_SESSION['errprompt'] = "Error updating receipt: " . mysqli_error($con);
@@ -179,7 +179,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
                       </div>
 
                       <div class="form-group">
-                        <a href="appointment.php" class="btn btn-secondary px-3">Cancel</a>
+                        <a href="appointment-list.php" class="btn btn-secondary px-3">Cancel</a>
                         <input type="submit" class="btn btn-primary px-4" name="save" value="Upload">
                       </div>
                     </form>

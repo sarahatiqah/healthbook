@@ -135,7 +135,7 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
             <!-- Modal Body -->
             <div class="modal-body">
               <p style="color: black;">You have <span style="color: red;"><?php echo $countAppointmentPendingUpcoming ?></span> new upcoming appointment to be approved.
-                <a href="appointment.php" style="color: blue;">Click here for more details</a>
+                <a href="appointment-list.php" style="color: blue;">Click here for more details</a>
               </p>
             </div>
 

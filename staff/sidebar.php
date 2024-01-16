@@ -16,14 +16,14 @@
 		<li class="sidebar-header">ACCOUNT</li>
 		<li>
 			<a href="profile.php">
-				<i class="zmdi zmdi-account" aria-hidden="true"></i><span>Profile Info</span>
+				<i class="fa fa-user" aria-hidden="true"></i><span>Profile Info</span>
 			</a>
 		</li>
 
 		<li class="sidebar-header">APPOINTMENTS</li>
 		<li>
-			<a href="appointment.php">
-				<i class="zmdi zmdi-calendar" aria-hidden="true"></i> <span>Listing</span>
+			<a href="appointment-list.php">
+				<i class="fa fa-calendar" aria-hidden="true"></i> <span>List</span>
 			</a>
 		</li>
 	</ul>
