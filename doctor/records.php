@@ -5,9 +5,10 @@ require '../dbconnection.php';
 require '../functions.php';
 
 // Pagination config
-$recordsPerPage = 1;
+$recordsPerPage = 10;
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($page - 1) * $recordsPerPage;
+$totalRecords = 0;
 $totalPages = 1;
 
 // Fetch stored filter
@@ -23,15 +24,15 @@ if (isset($_POST["filter"])) {
 
 // Get patient details
 if (!empty($_GET['patientId'])) {
-	$patientId = mysqli_real_escape_string($con, $_GET['patientId']);
-	$query = "SELECT * FROM patient WHERE CONCAT('P', LPAD(id, 3, '0')) = '$patientId'";
+	$formattedPatientId = mysqli_real_escape_string($con, $_GET['patientId']);
+	$query = "SELECT * FROM patient WHERE CONCAT('P', LPAD(id, 3, '0')) = '$formattedPatientId'";
 
 	if ($result = mysqli_query($con, $query)) {
 		if (mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
 			extract($row);
 		} else {
-			$_SESSION['errprompt'] = "Patient with ID = $patientId is not found.";
+			$_SESSION['errprompt'] = "Patient with ID = $formattedPatientId is not found.";
 		}
 	} else {
 		$_SESSION['errprompt'] = "An error had occured during query of database.";
@@ -120,12 +121,11 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 									</thead>
 									<tbody>
 										<?php
-										if (isset($patientId) && $result = mysqli_query($con, "SELECT *, CONCAT('A', LPAD(appId, 3, '0')) AS id FROM appointment WHERE CONCAT('P', LPAD(patientId, 3, '0')) = '$patientId' AND status = 'approved';")) {
+										if (!empty($_GET['patientId']) && $result = mysqli_query($con, "SELECT *, CONCAT('A', LPAD(appId, 3, '0')) AS id FROM appointment WHERE CONCAT('P', LPAD(patientId, 3, '0')) = '$formattedPatientId' AND status = 'approved';")) {
 											if (mysqli_num_rows($result) > 0) {
 												while ($row = mysqli_fetch_assoc($result)) {
 													extract($row);
 													// Format IDs
-													$formattedPatientId = sprintf('P%03d', $patientId);
 													$formattedAppId = sprintf('A%03d', $appId);
 
 													// Format date and time
@@ -181,9 +181,9 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 								</thead>
 								<tbody>
 									<?php
-									if (isset($patientId)) {
+									if (!empty($_GET['patientId'])) {
 										// Begin base sql
-										$sql = "SELECT records.*, doctor.doctorName AS providerName FROM records JOIN doctor ON records.doctor_id = doctor.id WHERE CONCAT('P', LPAD(patient_id, 3, '0')) = '$patientId'";
+										$sql = "SELECT records.*, doctor.doctorName AS providerName FROM records JOIN doctor ON records.doctor_id = doctor.id WHERE CONCAT('P', LPAD(patient_id, 3, '0')) = '$formattedPatientId'";
 
 										// Add ID filter
 										if (!empty($idFilter)) $sql .= " AND CONCAT('R', LPAD(record_id, 3, '0')) = '$idFilter'";
@@ -196,7 +196,7 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 												// Rendering logic
 												while ($row = mysqli_fetch_assoc($result)) {
 													// Fetch the total number of records for pagination
-													$totalRecordsSql = "SELECT COUNT(*) as total FROM records WHERE CONCAT('P', LPAD(patient_id, 3, '0')) = '$patientId'";
+													$totalRecordsSql = "SELECT COUNT(*) as total FROM records WHERE CONCAT('P', LPAD(patient_id, 3, '0')) = '$formattedPatientId'";
 													if (!empty($idFilter)) $totalRecordsSql .= " AND CONCAT('R', LPAD(record_id, 3, '0')) = '$idFilter'";
 													$totalRecordsResult = $con->query($totalRecordsSql);
 													$totalRecords = $totalRecordsResult->fetch_assoc()['total'];
@@ -231,16 +231,21 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
 							</table>
 
 							<!-- Pagination -->
-							<nav aria-label="Page navigation" class="mt-4">
-								<ul class="pagination justify-content-end">
+							<nav aria-label="Page navigation" class="mt-4 d-flex flex-row justify-content-between align-items-center">
+								<span class="mb-3">
+									Showing <?= min($totalRecords, ($page - 1) * $recordsPerPage + 1); ?>
+									to <?= min($totalRecords, $page * $recordsPerPage); ?>
+									of <?= $totalRecords; ?> results
+								</span>
+								<ul class="pagination">
 									<li class="page-item <?= ($page <= 1) ? 'disabled' : ''; ?>">
-										<a class="page-link" href="records.php?patientId=<?= $patientId; ?>&page=<?= $page - 1; ?>" aria-label="Previous">
+										<a class="page-link" href="records.php?patientId=<?= $formattedPatientId; ?>&page=<?= $page - 1; ?>" aria-label="Previous">
 											<span aria-hidden="true">&laquo;</span>
 										</a>
 									</li>
 
 									<li class="page-item <?= ($page >= $totalPages) ? 'disabled' : ''; ?>">
-										<a class="page-link" href="records.php?patientId=<?= $patientId; ?>&page=<?= $page + 1; ?>" aria-label="Next">
+										<a class="page-link" href="records.php?patientId=<?= $formattedPatientId; ?>&page=<?= $page + 1; ?>" aria-label="Next">
 											<span aria-hidden="true">&raquo;</span>
 										</a>
 									</li>
