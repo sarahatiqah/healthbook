@@ -269,10 +269,6 @@ if (isset($_SESSION['doctorId'], $_SESSION['password'])) {
                               $count++;
                               $currentDate = $appDate;
                             }
-                          } else {
-                            echo "<tr>";
-                            echo "<td colspan='7' style='text-align: center; color: red;'>No records found</td>";
-                            echo "</tr>";
                           }
                         } else {
                           die("Error with the query in the database");
