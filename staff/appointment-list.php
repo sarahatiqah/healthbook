@@ -12,6 +12,8 @@ use PHPMailer\PHPMailer\Exception;
 require '../vendor/autoload.php';
 
 if (isset($_SESSION['staffId'], $_SESSION['password'])) {
+	$filterStatus = isset($_GET['filter']) && $_GET['filter'] == 'pending';
+
 	// Approve appointment
 	if (isset($_GET['app_id']) && isset($_GET['patientEmail']) && isset($_GET['appDate']) && isset($_GET['appTime'])  && isset($_GET['doctorName'])) {
 		$app_id = clean($_GET['app_id']);
@@ -64,7 +66,9 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 			$_SESSION['errprompt'] = "Error updating appointment status: " . mysqli_error($con);
 		}
 
-		header("location: appointment-list.php");
+		// Redirect to the appropriate page
+		$redirectUrl = $filterStatus ? "appointment-list.php?filter=pending" : "appointment-list.php";
+		header("Location: $redirectUrl");
 		exit;
 	}
 
@@ -80,7 +84,9 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 			$_SESSION['errprompt'] = "Error deleting appointment.";
 		}
 
-		header("location: appointment-list.php");
+		// Redirect to the appropriate page
+		$redirectUrl = $filterStatus ? "appointment-list.php?filter=pending" : "appointment-list.php";
+		header("Location: $redirectUrl");
 		exit;
 	}
 ?>
@@ -154,12 +160,25 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 									</thead>
 									<tbody>
 										<?php
-										$sql = "SELECT a.*, b.patientName,b.patientEmail,c.doctorName,d.name_dependent 
-												FROM appointment a 
-												JOIN patient b ON a.patientID = b.id 
-												JOIN doctor c ON a.doctorID = c.id 
-												LEFT JOIN dependent d ON a.dependentID = d.id_dependent
-												ORDER BY a.appDate DESC, a.appTime";
+										$filterStatus = isset($_GET['filter']) && $_GET['filter'] == 'pending';
+										if ($filterStatus) {
+											$query = "SELECT a.*, b.patientName, b.patientEmail, c.doctorName, d.name_dependent 
+													  FROM appointment a 
+													  JOIN patient b ON a.patientID = b.id 
+													  JOIN doctor c ON a.doctorID = c.id 
+													  LEFT JOIN dependent d ON a.dependentID = d.id_dependent
+													  WHERE a.status = 'pending' 
+													  AND (a.appDate > '$currentDate' OR (a.appDate = '$currentDate' AND a.appTime > '$currentTime'))
+													  ORDER BY a.appDate ASC, a.appTime ASC";
+										} else {
+											// Keep your existing query here for the non-filtered view
+											$query = "SELECT a.*, b.patientName, b.patientEmail, c.doctorName, d.name_dependent 
+													  FROM appointment a 
+													  JOIN patient b ON a.patientID = b.id 
+													  JOIN doctor c ON a.doctorID = c.id 
+													  LEFT JOIN dependent d ON a.dependentID = d.id_dependent
+													  ORDER BY a.appDate DESC, a.appTime";
+										}
 
 										// No errors with SQL
 										if ($result = mysqli_query($con, $sql)) {
@@ -198,11 +217,11 @@ if (isset($_SESSION['staffId'], $_SESSION['password'])) {
 															<td style="vertical-align: middle;"><?php
 																								if ($appDate >= $datenow && ($appDate > $datenow || $appTime >= $timenow)) {
 																									// Approve Button
-																									echo "<a href='appointment-list.php?app_id={$appId}&patientEmail={$patientEmail}&appDate={$formattedDateEmail}&appTime={$formattedTime}&doctorName={$doctorName}' class='btn btn-success mr-2' onclick='return confirm(`Are you sure you want to approve this appointment?`);'><i class='fa fa-check-circle'></i></a>";
+																									echo "<a href='appointment-list.php?app_id={$appId}&patientEmail={$patientEmail}&appDate={$formattedDateEmail}&appTime={$formattedTime}&doctorName={$doctorName}&filter=" . ($filterStatus ? "pending" : "all") . "' class='btn btn-success mr-2' onclick='return confirm(`Are you sure you want to approve this appointment?`);'><i class='fa fa-check-circle'></i></a>";
 																									// Update Button
 																									echo "<a href='edit-appointment.php?id={$appId}&did={$doctorID}&appDate={$appDate}' class='btn btn-warning mr-2'><i class='fa fa-pencil'></i></a>";
 																								}
-																								?><a href="appointment-list.php?delete_id=<?= $appId ?>" class='btn btn-danger' onclick='return confirm("Are you sure you want to delete this appointment?");'><i class='fa fa-trash'></i></a>
+																								?><a href="appointment-list.php?delete_id=<?= $appId ?>filter=<?= $filterStatus ? "pending" : "all" ?>" class='btn btn-danger' onclick='return confirm("Are you sure you want to delete this appointment?");'><i class='fa fa-trash'></i></a>
 															</td style="vertical-align: middle;">
 														</tr><?php
 															} elseif ($status == "approved") { ?>
