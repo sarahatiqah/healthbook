@@ -14,7 +14,9 @@
 
 6. Import healthbook.sql file
 
-7. Run the script http://localhost/healthbook
+7. Run composer install in terminal
+
+8. Run the script http://localhost/healthbook
 
 ## Account Credentials for Login
 ### Admin Login
