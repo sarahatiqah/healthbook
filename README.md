@@ -23,16 +23,16 @@
 
 - Username: admin
 
-- Password: 123
+- Password: 12345
 
 ### Doctor Login
 
 - Username: D001
 
-- Password: 123
+- Password: 12345
 
 ### Staff Login
 
 - Username: S001
 
-- Password: 123
+- Password: 12345
