@@ -1,5 +1,5 @@
 # HealthBook
-
+A web-based application designed to streamline the appointment booking process for healthcare providers and patients. It facilitates easy scheduling and management of appointments, reducing the need for phone calls or in-person visits. The system includes modules for authentication, account management, a chatbot, appointment scheduling, notifications, doctor management, resource management, and record management, all aimed at enhancing user experience and operational efficiency in healthcare services.
 
 ## How to run HealthBook
 1. Clone repository
